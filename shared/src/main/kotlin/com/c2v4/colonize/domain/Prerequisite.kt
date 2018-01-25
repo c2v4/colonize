@@ -1,12 +1,12 @@
 package com.c2v4.colonize.domain
 
 sealed class Prerequisite {
-    abstract fun applicable(player: Player,state: State): Boolean
-    abstract fun apply(player: Player,state: State): State
+    abstract fun isApplicable(player: Player, state: State): Boolean
+    abstract fun apply(player: Player, state: State): State
 }
 
 object None : Prerequisite() {
-    override fun applicable(player: Player, state: State): Boolean {
+    override fun isApplicable(player: Player, state: State): Boolean {
         return true
     }
 
@@ -15,13 +15,16 @@ object None : Prerequisite() {
     }
 }
 
-class SpendResource(private val resources:Map<Resource,Int>):Prerequisite(){
+class SpendResource(private val resources: Map<Resource, Int>) : Prerequisite() {
     override fun apply(player: Player, state: State): State {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun applicable(player: Player, state: State): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isApplicable(player: Player, state: State): Boolean =
+            state.wallets[player]?.let {
+                resources.entries.all { (resource, amount) ->
+                    it[resource] ?: 0 >= amount
+                }
+            } ?: false
 
 }
