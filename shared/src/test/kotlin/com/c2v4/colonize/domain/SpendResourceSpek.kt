@@ -7,7 +7,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-
+import org.junit.platform.runner.JUnitPlatform
 
 object SpendResourceSpek : Spek({
     val testState = State(
@@ -19,6 +19,10 @@ object SpendResourceSpek : Spek({
             it("True for positive case") {
                 assertThat(SpendResource(mapOf(ENERGY to 3,
                         HEAT to 2)).isApplicable(Player("Asd"), testState)).isTrue()
+            }
+            it("False for negative case") {
+                assertThat(SpendResource(mapOf(ENERGY to 5,
+                        HEAT to 2)).isApplicable(Player("Asd"), testState)).isFalse()
             }
         }
     }
