@@ -4,21 +4,21 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile group: 'com.github.salomonbrys.kodein', name: 'kodein', version: '4.1.0'
 
-    compile 'io.arrow-kt:arrow-core:0.6.0'
-    compile 'io.arrow-kt:arrow-typeclasses:0.6.0'
-    compile 'io.arrow-kt:arrow-instances:0.6.0'
-    compile 'io.arrow-kt:arrow-syntax:0.6.0'
+//    compile 'io.arrow-kt:arrow-core:0.6.0'
+//    compile 'io.arrow-kt:arrow-typeclasses:0.6.0'
+//    compile 'io.arrow-kt:arrow-instances:0.6.0'
+//    compile 'io.arrow-kt:arrow-syntax:0.6.0'
+//
+//    compile 'io.arrow-kt:arrow-free:0.6.0' //optional
+//    compile 'io.arrow-kt:arrow-mtl:0.6.0' //optional
+//    compile 'io.arrow-kt:arrow-effects:0.6.0' //optional
+//    compile 'io.arrow-kt:arrow-effects-rx2:0.6.0' //optional
+//    compile 'io.arrow-kt:arrow-effects-kotlinx-coroutines:0.6.0' //optional
+//    compile 'io.arrow-kt:arrow-optics:0.6.0' //optional
 
-    compile 'io.arrow-kt:arrow-free:0.6.0' //optional
-    compile 'io.arrow-kt:arrow-mtl:0.6.0' //optional
-    compile 'io.arrow-kt:arrow-effects:0.6.0' //optional
-    compile 'io.arrow-kt:arrow-effects-rx2:0.6.0' //optional
-    compile 'io.arrow-kt:arrow-effects-kotlinx-coroutines:0.6.0' //optional
-    compile 'io.arrow-kt:arrow-optics:0.6.0' //optional
+//    compile group: 'com.google.guava', name: 'guava', version: '23.6-jre'
 
-    compile group: 'com.google.guava', name: 'guava', version: '23.6-jre'
-
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+//    compile "org.jetbrains.kotlin:kotlin-reflect"
     testCompile "org.jetbrains.kotlin:kotlin-test"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit"
 

@@ -1,6 +1,6 @@
 package com.c2v4.colonize.domain
 
-import com.google.common.base.Preconditions
+import com.c2v4.colonize.util.checkArgument
 
 sealed class Prerequisite {
     abstract fun isApplicable(player: Player, state: State): Boolean
@@ -19,7 +19,7 @@ object None : Prerequisite() {
 
 class SpendResource(private val resources: Map<Resource, Int>) : Prerequisite() {
     override operator fun invoke(player: Player, state: State): State {
-        Preconditions.checkArgument(isApplicable(player, state))
+        checkArgument(isApplicable(player, state))
         return state.copy(wallets = state.wallets.plus(player to removeResources(state.wallets[player]!!,
                 resources)))
     }
