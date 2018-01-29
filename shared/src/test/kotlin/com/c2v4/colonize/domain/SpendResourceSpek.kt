@@ -30,9 +30,11 @@ class SpendResourceSpek : Spek({
         }
         on("Check invoke") {
             it("Removes resources from player's wallet") {
-                assertThat(spendResource(Player("Asd"), testState)).isEqualTo(State(
+                assertThat(spendResource(Player("Asd"), testState)).isIn(State(
                         wallets = testState.wallets.plus(Player("Asd") to mapOf(ENERGY to 1,
                                 PLANT to 2))
+                ), State(wallets = testState.wallets.plus(Player("Asd") to mapOf(ENERGY to 1,
+                        PLANT to 2, HEAT to 0))
                 ))
             }
             it("Throws exception when is not applicable") {
