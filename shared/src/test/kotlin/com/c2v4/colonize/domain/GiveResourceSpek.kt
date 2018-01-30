@@ -16,10 +16,10 @@ class GiveResourceSpek : Spek({
                     Player("Bsd") to mapOf(ENERGY to 1, HEAT to 3))
     )
     given("GiveResource") {
-        val giveResource = GiveResource(mapOf(HEAT to 3,ENERGY to 4))
+        val giveResource = GiveResource(mapOf(HEAT to 3,ENERGY to 4),Player("Asd") )
         on("Check invoke"){
             it("Gives resource to player"){
-                assertThat(giveResource(Player("Asd"),testState)).isEqualTo(testState.copy(wallets = testState.wallets.plus(Player("Asd") to mapOf(HEAT to 6, ENERGY to 8, PLANT to 2))))
+                assertThat(giveResource(testState)).isEqualTo(testState.copy(wallets = testState.wallets.plus(Player("Asd") to mapOf(HEAT to 6, ENERGY to 8, PLANT to 2))))
             }
         }
     }
