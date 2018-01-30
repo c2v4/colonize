@@ -7,9 +7,9 @@ sealed class Action {
     abstract operator fun invoke(state: State): State
 }
 
-fun Action.combined(another:Action) = Combined(this,another)
+fun Action.combined(another:Action) = Combined(listOf(this,another))
 
-fun Action.consequent(another:Action) = Consequent(this,another)
+fun Action.consequent(another:Action) = Consequent(listOf(this,another))
 
 object None : Action() {
     override fun isApplicable(state: State): Boolean {
@@ -57,7 +57,7 @@ class GiveResource(private val resources: Map<Resource, Int>,
     }
 }
 
-data class Combined(val first: Action, val second: Action) : Action() {
+data class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -67,7 +67,9 @@ data class Combined(val first: Action, val second: Action) : Action() {
     }
 }
 
-data class Consequent(val prerequisite: Action, val effect: Action) : Action() {
+fun Combined.combined(next: Action) = Combined(actions.plus(next))
+
+data class Consequent(val actions: List<Action>) : Action() {
     override fun invoke(state: State): State {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -77,3 +79,5 @@ data class Consequent(val prerequisite: Action, val effect: Action) : Action() {
     }
 
 }
+
+fun Consequent.consequent(next: Action) = Consequent(actions.plus(next))
