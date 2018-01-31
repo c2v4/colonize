@@ -7,9 +7,12 @@ sealed class Action {
     abstract operator fun invoke(state: State): State
 }
 
-fun Action.combined(another:Action) = Combined(listOf(this,another))
+fun Action.combined(another: Action) = Combined(listOf(this, another))
 
-fun Action.consequent(another:Action) = Consequent(listOf(this,another))
+fun Action.consequent(another: Action) = Consequent(listOf(this, another))
+
+fun Action.withTurnCheck() = TurnChecked(this)
+
 
 object None : Action() {
     override fun isApplicable(state: State): Boolean {
@@ -57,9 +60,35 @@ class GiveResource(private val resources: Map<Resource, Int>,
     }
 }
 
+class TurnChecked(private val action: Action) : Action() {
+
+    override fun isApplicable(state: State): Boolean = action.isApplicable(state)
+
+    override fun invoke(state: State): State {
+        action.invoke(state).let {
+            return if (it.actionsPlayed > 1) {
+                nextTurn(it)
+            } else {
+                it
+            }
+        }
+    }
+
+}
+
+data class Pass(private val player: Player) : Action() {
+
+    override fun isApplicable(state: State) = state.players[state.currentPlayer]==player
+
+    override fun invoke(state: State): State {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
 data class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented" ) //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun invoke(state: State): State {
@@ -81,3 +110,6 @@ data class Consequent(val actions: List<Action>) : Action() {
 }
 
 fun Consequent.consequent(next: Action) = Consequent(actions.plus(next))
+
+private fun nextTurn(state: State) =
+        state.copy(actionsPlayed = 0, currentPlayer = (state.currentPlayer + 1) % state.players.size)
