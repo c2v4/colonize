@@ -22,6 +22,11 @@ class GiveResourceSpek : Spek({
                 assertThat(giveResource(testState)).isEqualTo(testState.copy(wallets = testState.wallets.plus(Player("Asd") to mapOf(HEAT to 6, ENERGY to 8, PLANT to 2))))
             }
         }
+        on("Check applicable"){
+            it("Is always true"){
+                assertThat(giveResource.isApplicable(testState)).isTrue()
+            }
+        }
     }
 })
 

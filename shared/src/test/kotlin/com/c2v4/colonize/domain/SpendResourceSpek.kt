@@ -13,10 +13,6 @@ import java.lang.IllegalArgumentException
 
 @RunWith(JUnitPlatform::class)
 class SpendResourceSpek : Spek({
-    val testState = State(
-            wallets = mapOf(Player("Asd") to mapOf(HEAT to 3, ENERGY to 4, PLANT to 2),
-                    Player("Bsd") to mapOf(ENERGY to 1, HEAT to 3))
-    )
     given("SpendResource") {
         val spendResource = SpendResource(mapOf(ENERGY to 3, HEAT to 3), Player("Asd"))
         on("Check isApplicable") {

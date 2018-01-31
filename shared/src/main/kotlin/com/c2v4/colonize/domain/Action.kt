@@ -19,7 +19,7 @@ object None : Action() {
         return true
     }
 
-    override operator fun invoke(state: State) = state.copy()
+    override operator fun invoke(state: State) = state
 }
 
 class SpendResource(private val resources: Map<Resource, Int>,
@@ -66,10 +66,10 @@ class TurnChecked(private val action: Action) : Action() {
 
     override fun invoke(state: State): State {
         action.invoke(state).let {
-            return if (it.actionsPlayed > 1) {
+            return if (it.actionsPlayed > 0) {
                 nextTurn(it)
             } else {
-                it
+                it.copy(actionsPlayed = it.actionsPlayed+1)
             }
         }
     }
