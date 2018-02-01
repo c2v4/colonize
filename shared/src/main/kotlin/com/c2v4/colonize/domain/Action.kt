@@ -80,9 +80,7 @@ data class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer]==player
 
-    override fun invoke(state: State): State {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun invoke(state: State): State = nextTurn(state).copy(consecutivePasses = state.consecutivePasses+1)
 
 }
 
