@@ -94,8 +94,6 @@ data class Combined(val actions: List<Action>) : Action() {
     }
 }
 
-fun Combined.combined(next: Action) = Combined(actions.plus(next))
-
 data class Consequent(val actions: List<Action>) : Action() {
     override fun invoke(state: State): State {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -106,8 +104,6 @@ data class Consequent(val actions: List<Action>) : Action() {
     }
 
 }
-
-fun Consequent.consequent(next: Action) = Consequent(actions.plus(next))
 
 private fun nextTurn(state: State) =
         state.copy(actionsPlayed = 0, currentPlayer = (state.currentPlayer + 1) % state.players.size)
