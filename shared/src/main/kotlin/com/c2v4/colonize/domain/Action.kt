@@ -76,7 +76,7 @@ class TurnChecked(private val action: Action) : Action() {
 
 }
 
-data class Pass(private val player: Player) : Action() {
+class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer]==player
 
@@ -84,7 +84,7 @@ data class Pass(private val player: Player) : Action() {
 
 }
 
-data class Combined(val actions: List<Action>) : Action() {
+class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean {
         TODO("not implemented" ) //To change body of created functions use File | Settings | File Templates.
     }
@@ -94,7 +94,7 @@ data class Combined(val actions: List<Action>) : Action() {
     }
 }
 
-data class Consequent(val actions: List<Action>) : Action() {
+class Consequent(val actions: List<Action>) : Action() {
     override fun invoke(state: State): State {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
