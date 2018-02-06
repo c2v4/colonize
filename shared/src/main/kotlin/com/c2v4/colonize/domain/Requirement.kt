@@ -1,5 +1,3 @@
 package com.c2v4.colonize.domain
 
-sealed class Requirement
-
-class Temperature(val condition:Condition)
+class  Requirement<in T : Comparable<T>>(private val selector: Selector<T>, private val condition: Condition)

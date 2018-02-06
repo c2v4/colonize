@@ -5,4 +5,5 @@ data class State(val players: List<Player> = emptyList(),
                  val wallets: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val availableActions: Map<Player,Action> = emptyMap(),
                  val actionsPlayed:Int = 0,
-                 val consecutivePasses:Int = 0)
+                 val consecutivePasses:Int = 0,
+                 val temperature: Int)
