@@ -6,4 +6,4 @@ data class State(val players: List<Player> = emptyList(),
                  val availableActions: Map<Player,Action> = emptyMap(),
                  val actionsPlayed:Int = 0,
                  val consecutivePasses:Int = 0,
-                 val temperature: Int)
+                 val temperature: Int = -30)

@@ -1,4 +1,6 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.requirement
+
+import com.c2v4.colonize.domain.State
 
 
 sealed class Selector<T : Comparable<T>> {

@@ -1,4 +1,4 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.requirement
 
 sealed class Condition<in T : Comparable<T>> {
     abstract operator fun invoke(value: T): Boolean
