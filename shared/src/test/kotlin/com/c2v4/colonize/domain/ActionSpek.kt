@@ -14,7 +14,7 @@ import org.mockito.Mockito
 import java.lang.IllegalArgumentException
 
 @RunWith(JUnitPlatform::class)
-class ActionSpek : Spek({
+object ActionSpek : Spek({
     val testState = State(listOf(Player("Asd"), Player("Bsd")),
             0,
             wallets = mapOf(Player("Asd") to mapOf(Resource.HEAT to 3,
