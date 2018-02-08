@@ -1,6 +1,8 @@
 package com.c2v4.colonize.domain
 
 import com.c2v4.colonize.util.checkArgument
+import com.c2v4.colonize.util.minus
+import com.c2v4.colonize.util.plus
 
 sealed class Action {
     abstract fun isApplicable(state: State): Boolean
@@ -26,22 +28,16 @@ class SpendResource(private val resources: Map<Resource, Int>,
                     private val player: Player) : Action() {
     override operator fun invoke(state: State): State {
         checkArgument(isApplicable(state))
-        return state.copy(wallets = state.wallets.plus(player to removeResources(state.wallets[player]!!,
-                resources)))
+        return state.copy(wallets = state.wallets.plus(player to (state.wallets[player]?.minus(
+                resources))!!))
     }
 
-    private fun removeResources(wallet: Map<Resource, Int>,
-                                resources: Map<Resource, Int>): Map<Resource, Int> =
-            wallet.map { (resource, amount) ->
-                resource to amount - resources.getOrDefault(resource, 0)
-            }.filter { (_, amount) -> amount > 0 }.toMap()
-
     override fun isApplicable(state: State): Boolean =
-            state.wallets[player]?.let {
+            state.wallets.getOrDefault(player, emptyMap()).let {
                 resources.entries.all { (resource, amount) ->
                     it[resource] ?: 0 >= amount
                 }
-            } ?: false
+            }
 
 }
 
@@ -52,10 +48,7 @@ class GiveResource(private val resources: Map<Resource, Int>,
     override fun invoke(state: State): State {
         return state.let {
             it.copy(wallets = it.wallets.plus(player
-                    to (it.wallets[player]?.map {
-                it.key to it.value + resources.getOrDefault(it.key,
-                        0)
-            }?.toMap() ?: emptyMap())))
+                    to (it.wallets[player]?.plus(resources) ?: emptyMap())))
         }
     }
 }
@@ -69,7 +62,7 @@ class TurnChecked(private val action: Action) : Action() {
             return if (it.actionsPlayed > 0) {
                 nextTurn(it)
             } else {
-                it.copy(actionsPlayed = it.actionsPlayed+1)
+                it.copy(actionsPlayed = it.actionsPlayed + 1)
             }
         }
     }
@@ -78,32 +71,36 @@ class TurnChecked(private val action: Action) : Action() {
 
 class Pass(private val player: Player) : Action() {
 
-    override fun isApplicable(state: State) = state.players[state.currentPlayer]==player
+    override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
-    override fun invoke(state: State): State = nextTurn(state).copy(consecutivePasses = state.consecutivePasses+1)
+    override fun invoke(state: State): State = nextTurn(state).copy(consecutivePasses = state.consecutivePasses + 1)
 
 }
 
-class Combined(val actions: List<Action>) : Action() {
-    override fun isApplicable(state: State): Boolean {
-        TODO("not implemented" ) //To change body of created functions use File | Settings | File Templates.
-    }
+class Combined(private val actions: List<Action>) : Action() {
+    override fun isApplicable(state: State): Boolean = actions.all { it.isApplicable(state) }
 
-    override fun invoke(state: State): State {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun invoke(state: State): State = actions.fold(state,
+            { acc, action -> action.invoke(acc) })
 }
 
-class Consequent(val actions: List<Action>) : Action() {
-    override fun invoke(state: State): State {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class Consequent(private val actions: List<Action>) : Action() {
 
-    override fun isApplicable(state: State): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isApplicable(state: State): Boolean =
+            actions.fold(state to true, { (newState, applicableSoFar), action ->
+                if (applicableSoFar && action.isApplicable(newState)) {
+                    action(newState) to true
+                } else {
+                    newState to false
+                }
+            }).second
+
+    override fun invoke(state: State): State = actions.fold(state,
+            { acc, action -> action.invoke(acc) })
+
 
 }
 
 private fun nextTurn(state: State) =
-        state.copy(actionsPlayed = 0, currentPlayer = (state.currentPlayer + 1) % state.players.size)
+        state.copy(actionsPlayed = 0,
+                currentPlayer = (state.currentPlayer + 1) % state.players.size)

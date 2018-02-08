@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.Resource.*
 import mock
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -17,10 +18,10 @@ import java.lang.IllegalArgumentException
 object ActionSpek : Spek({
     val testState = State(listOf(Player("Asd"), Player("Bsd")),
             0,
-            wallets = mapOf(Player("Asd") to mapOf(Resource.HEAT to 3,
-                    Resource.ENERGY to 4,
-                    Resource.PLANT to 2),
-                    Player("Bsd") to mapOf(Resource.ENERGY to 1, Resource.HEAT to 3))
+            wallets = mapOf(Player("Asd") to mapOf(HEAT to 3,
+                    ENERGY to 4,
+                    PLANT to 2),
+                    Player("Bsd") to mapOf(ENERGY to 1, HEAT to 3))
     )
     given("Pass Action") {
         val passAction = Pass(Player("Asd"))
@@ -46,13 +47,18 @@ object ActionSpek : Spek({
     }
 
     given("GiveResource") {
-        val giveResource = GiveResource(mapOf(Resource.HEAT to 3, Resource.ENERGY to 4),
+        val giveResource = GiveResource(mapOf(HEAT to 3,
+                ENERGY to 4,
+                IRON to 2),
                 Player("Asd"))
         on("Check invoke") {
             it("Gives resource to player") {
                 assertThat(giveResource(testState)).isEqualTo(testState.copy(wallets = testState.wallets.plus(
                         Player("Asd") to mapOf(
-                                Resource.HEAT to 6, Resource.ENERGY to 8, Resource.PLANT to 2))))
+                                HEAT to 6,
+                                ENERGY to 8,
+                                PLANT to 2,
+                                IRON to 2))))
             }
         }
         on("Check applicable") {
@@ -76,33 +82,33 @@ object ActionSpek : Spek({
     }
 
     given("SpendResource") {
-        val spendResource = SpendResource(mapOf(Resource.ENERGY to 3, Resource.HEAT to 3),
+        val spendResource = SpendResource(mapOf(ENERGY to 3, HEAT to 3),
                 Player("Asd"))
         on("Check isApplicable") {
             it("True for positive case") {
                 assertThat(spendResource.isApplicable(testState)).isTrue()
             }
             it("False for negative case") {
-                assertThat(SpendResource(mapOf(Resource.ENERGY to 5,
-                        Resource.HEAT to 2), Player("Asd")).isApplicable(testState)).isFalse()
+                assertThat(SpendResource(mapOf(ENERGY to 5,
+                        HEAT to 2), Player("Asd")).isApplicable(testState)).isFalse()
             }
         }
         on("Check invoke") {
             it("Removes resources from player's wallet") {
                 assertThat(spendResource(testState)).isIn(testState.copy(
-                        wallets = testState.wallets.plus(Player("Asd") to mapOf(Resource.ENERGY to 1,
-                                Resource.PLANT to 2))
+                        wallets = testState.wallets.plus(Player("Asd") to mapOf(ENERGY to 1,
+                                PLANT to 2))
                 ),
                         testState.copy(wallets = testState.wallets.plus(Player("Asd") to mapOf(
-                                Resource.ENERGY to 1,
-                                Resource.PLANT to 2,
-                                Resource.HEAT to 0))
+                                ENERGY to 1,
+                                PLANT to 2,
+                                HEAT to 0))
                         ))
             }
             it("Throws exception when is not applicable") {
                 Assertions.assertThatThrownBy {
-                    SpendResource(mapOf(Resource.ENERGY to 3,
-                            Resource.HEAT to 3), Player("Bsd"))(testState)
+                    SpendResource(mapOf(ENERGY to 3,
+                            HEAT to 3), Player("Bsd"))(testState)
                 }.isInstanceOf(
                                 IllegalArgumentException::class.java)
             }
@@ -144,6 +150,82 @@ object ActionSpek : Spek({
         on("Applicable") {
             it("Is always true") {
                 assertThat(None.withTurnCheck().isApplicable(testState)).isTrue()
+            }
+        }
+    }
+    given("Combined Actions") {
+        on("isApplicable") {
+            it("should return true when both actions are applicable") {
+                val action = mock<Action>()
+                val action2 = mock<Action>()
+
+                BDDMockito.given(action.isApplicable(testState)).willReturn(true)
+                BDDMockito.given(action2.isApplicable(testState)).willReturn(true)
+
+                assertThat(action.combined(action2).isApplicable(testState)).isTrue()
+            }
+            it("should return false when at least one action is not applicable") {
+                val action = mock<Action>()
+                val action2 = mock<Action>()
+
+                BDDMockito.given(action.isApplicable(testState)).willReturn(false)
+                BDDMockito.given(action2.isApplicable(testState)).willReturn(true)
+
+                assertThat(action.combined(action2).isApplicable(testState)).isFalse()
+            }
+        }
+        on("invoke") {
+            it("should apply all actions to the state") {
+                val action = GiveResource(mapOf(IRON to 2), Player("Asd"))
+                val action2 = GiveResource(mapOf(PLANT to 1), Player("Asd"))
+
+                assertThat(action.combined(action2)(State(wallets = mapOf(Player("Asd") to mapOf(
+                        HEAT to 3,
+                        IRON to 2)))))
+                        .isEqualTo(
+                                State(wallets = mapOf(Player("Asd") to mapOf(
+                                        HEAT to 3,
+                                        IRON to 4,
+                                        PLANT to 1)))
+                        )
+            }
+        }
+    }
+    given("Consequent Actions") {
+        on("isApplicable") {
+            it("should return true when both actions are applicable") {
+                val action = mock<Action>()
+                val action2 = mock<Action>()
+
+                BDDMockito.given(action.isApplicable(testState)).willReturn(true)
+                BDDMockito.given(action(testState)).willReturn(testState)
+                BDDMockito.given(action2.isApplicable(testState)).willReturn(true)
+                BDDMockito.given(action2(testState)).willReturn(testState)
+
+                assertThat(action.consequent(action2).isApplicable(testState)).isTrue()
+            }
+            it("should return false when at least one action is not applicable") {
+                val action = SpendResource(mapOf(IRON to 1), Player("Asd"))
+                val action2 = SpendResource(mapOf(IRON to 2), Player("Asd"))
+
+                assertThat(action.consequent(action2).isApplicable(State(wallets = mapOf(Player(
+                        "Asd") to mapOf(IRON to 2))))).isFalse()
+            }
+        }
+        on("invoke") {
+            it("should apply all actions to the state") {
+                val action = GiveResource(mapOf(IRON to 2), Player("Asd"))
+                val action2 = GiveResource(mapOf(PLANT to 1), Player("Asd"))
+
+                assertThat(action.consequent(action2)(State(wallets = mapOf(Player("Asd") to mapOf(
+                        HEAT to 3,
+                        IRON to 2)))))
+                        .isEqualTo(
+                                State(wallets = mapOf(Player("Asd") to mapOf(
+                                        HEAT to 3,
+                                        IRON to 4,
+                                        PLANT to 1)))
+                        )
             }
         }
     }
