@@ -91,6 +91,7 @@ class Consequent(private val actions: List<Action>) : Action() {
                 if (applicableSoFar && action.isApplicable(newState)) {
                     action(newState) to true
                 } else {
+
                     newState to false
                 }
             }).second
