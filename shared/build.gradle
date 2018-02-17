@@ -28,6 +28,8 @@ dependencies {
     testCompile "org.jetbrains.spek:spek-api:$spekApiVersion"
     testCompile "org.jetbrains.spek:spek-junit-platform-engine:$spekApiVersion"
 
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.0'
+
     testCompile "org.junit.platform:junit-platform-gradle-plugin:${junitRunnerVersion}"
     testCompile "org.junit.platform:junit-platform-runner:$junitRunnerVersion"
     testCompile "org.junit.platform:junit-platform-console:$junitRunnerVersion"
