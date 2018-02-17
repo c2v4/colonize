@@ -18,11 +18,9 @@ object ConditionSpek : Spek({
             }
             it("returns false for greater value") {
                 assertThat(atMost(12)).isFalse()
-
             }
             it("returns true for smaller value") {
                 assertThat(atMost(8)).isTrue()
-
             }
         }
     }

@@ -13,10 +13,10 @@ import org.mockito.BDDMockito
 import org.mockito.Mockito.times
 
 @RunWith(JUnitPlatform::class)
-object RequirementSpek :Spek({
-    given("Requirement"){
-        on("invoke"){
-            it("calls selector and passes it's result to condition"){
+object RequirementSpek : Spek({
+    given("Requirement") {
+        on("invoke") {
+            it("calls selector and passes it's result to condition") {
                 val selector = mock<Selector<Int>>()
                 val condition = mock<Condition<Int>>()
                 val state = State()

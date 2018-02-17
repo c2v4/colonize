@@ -13,7 +13,6 @@ fun Action.combined(another: Action) = Combined(listOf(this, another))
 
 fun Action.consequent(another: Action) = Consequent(listOf(this, another))
 
-
 object None : Action() {
     override fun isApplicable(state: State): Boolean {
         return true
@@ -36,7 +35,6 @@ class SpendResource(private val resources: Map<Resource, Int>,
                     it[resource] ?: 0 >= amount
                 }
             }
-
 }
 
 class GiveResource(private val resources: Map<Resource, Int>,
@@ -51,13 +49,11 @@ class GiveResource(private val resources: Map<Resource, Int>,
     }
 }
 
-
 class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
-    override fun invoke(state: State): State = state.copy(actionsPlayed = 1,consecutivePasses = state.consecutivePasses + 1)
-
+    override fun invoke(state: State): State = state.copy(actionsPlayed = 1, consecutivePasses = state.consecutivePasses + 1)
 }
 
 class Combined(private val actions: List<Action>) : Action() {
@@ -81,6 +77,4 @@ class Consequent(private val actions: List<Action>) : Action() {
 
     override fun invoke(state: State): State = actions.fold(state,
             { acc, action -> action.invoke(acc) })
-
-
 }

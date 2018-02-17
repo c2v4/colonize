@@ -5,18 +5,16 @@ buildscript {
         jcenter()
         google()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
+        classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:3.0.1"
         classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.6.0"
     }
 }
 
 plugins {
     id "org.sonarqube" version "2.6"
-    id 'org.jmailen.kotlinter' version "1.6.0"
 }
 
 allprojects {
@@ -30,7 +28,7 @@ allprojects {
 configure(subprojects) {
     apply plugin: 'java'
     apply plugin: 'kotlin'
-//    apply plugin: 'kotlin-kapt'
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
     sourceCompatibility = 1.6
 }
 
@@ -42,6 +40,7 @@ subprojects {
         mavenCentral()
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 }
 

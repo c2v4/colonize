@@ -16,7 +16,7 @@ object StateSpek : Spek({
         on("After action played") {
             it("Stays with the same player") {
                 assertThat(testState.apply(None)).isEqualToComparingFieldByField(testState.copy(
-                        currentPlayer = 1,actionsPlayed = 1))
+                        currentPlayer = 1, actionsPlayed = 1))
             }
         }
 

@@ -11,9 +11,9 @@ import org.junit.runner.RunWith
 
 @RunWith(JUnitPlatform::class)
 object SelectorSpek : Spek({
-    given("Temperature selector"){
-        on("invoke"){
-            it("returns temperature value"){
+    given("Temperature selector") {
+        on("invoke") {
+            it("returns temperature value") {
                 assertThat(Temperature(State(temperature = 12))).isEqualTo(12)
             }
         }
