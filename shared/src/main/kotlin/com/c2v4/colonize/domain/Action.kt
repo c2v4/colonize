@@ -13,8 +13,6 @@ fun Action.combined(another: Action) = Combined(listOf(this, another))
 
 fun Action.consequent(another: Action) = Consequent(listOf(this, another))
 
-fun Action.withTurnCheck() = TurnChecked(this)
-
 
 object None : Action() {
     override fun isApplicable(state: State): Boolean {
@@ -53,27 +51,12 @@ class GiveResource(private val resources: Map<Resource, Int>,
     }
 }
 
-class TurnChecked(private val action: Action) : Action() {
-
-    override fun isApplicable(state: State): Boolean = action.isApplicable(state)
-
-    override fun invoke(state: State): State {
-        action.invoke(state).let {
-            return if (it.actionsPlayed > 0) {
-                nextTurn(it)
-            } else {
-                it.copy(actionsPlayed = it.actionsPlayed + 1)
-            }
-        }
-    }
-
-}
 
 class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
-    override fun invoke(state: State): State = nextTurn(state).copy(consecutivePasses = state.consecutivePasses + 1)
+    override fun invoke(state: State): State = state.copy(actionsPlayed = 1,consecutivePasses = state.consecutivePasses + 1)
 
 }
 
@@ -101,7 +84,3 @@ class Consequent(private val actions: List<Action>) : Action() {
 
 
 }
-
-private fun nextTurn(state: State) =
-        state.copy(actionsPlayed = 0,
-                currentPlayer = (state.currentPlayer + 1) % state.players.size)

@@ -10,3 +10,16 @@ data class State(val players: List<Player> = emptyList(),
                  val consecutivePasses:Int = 0,
                  val observers:List<Observer> = emptyList(),
                  val temperature: Int = -30)
+
+fun State.apply(action:Action):State =
+        action(this).let {
+            return if (it.actionsPlayed > 0) {
+                nextTurn(it)
+            } else {
+                it.copy(actionsPlayed = it.actionsPlayed + 1)
+            }
+        }
+
+private fun nextTurn(state: State) =
+        state.copy(actionsPlayed = 0,
+                currentPlayer = (state.currentPlayer + 1) % state.players.size)

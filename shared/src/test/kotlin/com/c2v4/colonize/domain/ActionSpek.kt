@@ -11,7 +11,6 @@ import org.jetbrains.spek.api.dsl.on
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 import org.mockito.BDDMockito
-import org.mockito.Mockito
 import java.lang.IllegalArgumentException
 
 @RunWith(JUnitPlatform::class)
@@ -26,14 +25,9 @@ object ActionSpek : Spek({
     given("Pass Action") {
         val passAction = Pass(Player("Asd"))
         on("Invoke") {
-            it("Changes player") {
-                assertThat(passAction(testState)).isEqualTo(testState.copy(currentPlayer = 1,
+            it("Sets players state as both actions played") {
+                assertThat(passAction(testState)).isEqualTo(testState.copy(actionsPlayed = 1,
                         consecutivePasses = 1))
-            }
-            it("Changes player to first when at the end") {
-                assertThat(Pass(Player("Bsd"))(testState.copy(currentPlayer = 1,
-                        consecutivePasses = 1))).isEqualTo(testState.copy(currentPlayer = 0,
-                        consecutivePasses = 2))
             }
         }
         on("Applicable") {
@@ -115,44 +109,6 @@ object ActionSpek : Spek({
         }
     }
 
-    given("Turn Checked Action") {
-        on("Invoke") {
-            it("Returns the same state but incremented turns") {
-                assertThat(None.withTurnCheck()(testState.copy(actionsPlayed = 0,
-                        currentPlayer = 0))).isEqualTo(testState.copy(actionsPlayed = 1,
-                        currentPlayer = 0))
-            }
-            it("When it was second action, changes player ") {
-                assertThat(None.withTurnCheck()(testState.copy(players = listOf(Player("Asd"),
-                        Player("Bsd")),
-                        actionsPlayed = 1,
-                        currentPlayer = 0))).isEqualTo(testState.copy(players = listOf(Player("Asd"),
-                        Player("Bsd")), actionsPlayed = 0, currentPlayer = 1))
-            }
-            it("When it was second action, of last player, changes player back to first ") {
-                assertThat(None.withTurnCheck()(testState.copy(players = listOf(Player("Asd"),
-                        Player("Bsd"),
-                        Player("Csd")),
-                        actionsPlayed = 1,
-                        currentPlayer = 2))).isEqualTo(testState.copy(players = listOf(Player("Asd"),
-                        Player("Bsd"),
-                        Player("Csd")), actionsPlayed = 0, currentPlayer = 0))
-            }
-            it("Invokes contained action") {
-                val mockedAction = mock<Action>()
-                BDDMockito.given(mockedAction.invoke(testState)).willReturn(testState)
-
-                TurnChecked(mockedAction)(testState)
-
-                BDDMockito.then(mockedAction).should(Mockito.times(1)).invoke(testState)
-            }
-        }
-        on("Applicable") {
-            it("Is always true") {
-                assertThat(None.withTurnCheck().isApplicable(testState)).isTrue()
-            }
-        }
-    }
     given("Combined Actions") {
         on("isApplicable") {
             it("should return true when both actions are applicable") {
