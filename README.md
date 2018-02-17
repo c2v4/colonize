@@ -12,6 +12,7 @@ This project uses [Gradle](http://gradle.org/) to manage dependencies. Gradle wr
 - `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
 - `--offline`: when using this flag, cached dependency archives will be used.
 - `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
+- `-t`: this flag will run in continuous mode - checking if sources were changed and rerunning tasks
 - `build`: builds sources and archives of every project.
 - `cleanEclipse`: removes Eclipse project data.
 - `cleanIdea`: removes IntelliJ project data.
@@ -25,6 +26,10 @@ This project uses [Gradle](http://gradle.org/) to manage dependencies. Gradle wr
 - `pack`: packs GUI assets from `raw/ui`. Saves the atlas file at `assets/ui`.
 - `server:run`: runs the server application.
 - `test`: runs unit tests (if any).
+- `ktlintCheck`: checks code formatting
+- `ktlintFormat`: formats source code
+
+For continous testing and ensuring good quality please use `gradlew -t --console=rich test ktlintCheck`
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
