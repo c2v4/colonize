@@ -13,19 +13,20 @@ data class State(val players: List<Player> = emptyList(),
                  val temperature: Int = -30)
 
 fun State.apply(action: Action): State =
-        checkArgument(action.isApplicable(this)).let {
-            updateWithObservers(action)
-        }
+    checkArgument(action.isApplicable(this)).let {
+        updateTurnChecked(action)
+    }
 
-private fun State.updateWithObservers(action: Action): State = update(action).let { state ->
+private fun State.updateWithObservers(action: Action): State = action(this).let { state ->
     state.observers.filter {
-        it.isAplicabe(action,
-                state)
-    }.fold(state, { acc, observer -> acc.updateWithObservers(observer.react(action, acc)) })
+        it.isApplicable(action, state)
+    }.fold(state, {
+            acc, observer -> acc.updateWithObservers(observer.react(action, acc))
+        })
 }
 
-private fun State.update(action: Action): State {
-    action(this).let {
+private fun State.updateTurnChecked(action: Action): State {
+    updateWithObservers(action).let {
         return if (it.actionsPlayed > 0) {
             nextTurn(it)
         } else {
@@ -35,5 +36,5 @@ private fun State.update(action: Action): State {
 }
 
 private fun nextTurn(state: State) =
-        state.copy(actionsPlayed = 0,
-                currentPlayer = (state.currentPlayer + 1) % state.players.size)
+    state.copy(actionsPlayed = 0,
+        currentPlayer = (state.currentPlayer + 1) % state.players.size)

@@ -44,7 +44,7 @@ class GiveResource(private val resources: Map<Resource, Int>,
     override fun invoke(state: State): State {
         return state.let {
             it.copy(wallets = it.wallets.plus(player
-                    to (it.wallets[player]?.plus(resources) ?: emptyMap())))
+                    to ((it.wallets[player]?:emptyMap() ).plus(resources))))
         }
     }
 }
