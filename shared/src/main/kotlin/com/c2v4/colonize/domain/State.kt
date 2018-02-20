@@ -21,18 +21,32 @@ private fun State.updateWithObservers(action: Action): State = action(this).let 
     state.observers.filter {
         it.isApplicable(action, state)
     }.fold(state, {
-            acc, observer -> acc.updateWithObservers(observer.react(action, acc))
+            acc, observer -> acc.dispatch(observer.react(action, acc))
         })
 }
 
+
 private fun State.updateTurnChecked(action: Action): State {
-    updateWithObservers(action).let {
+    dispatch(action).let {
         return if (it.actionsPlayed > 0) {
             nextTurn(it)
         } else {
             it.copy(actionsPlayed = it.actionsPlayed + 1)
         }
     }
+}
+
+fun State.dispatch(action: Action): State {
+    return when(action){
+        is Combined -> action.actions.fold(this,{
+            acc, internal -> acc.dispatch(internal)
+        })
+        is Consequent -> action.actions.fold(this,{
+            acc, internal -> acc.dispatch(internal)
+        })
+        else -> updateWithObservers(action)
+    }
+
 }
 
 private fun nextTurn(state: State) =

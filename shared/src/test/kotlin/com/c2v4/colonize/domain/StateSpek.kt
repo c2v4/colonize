@@ -6,7 +6,6 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.on
-import org.jetbrains.spek.api.dsl.xit
 import org.junit.platform.runner.JUnitPlatform
 import org.junit.runner.RunWith
 
@@ -16,7 +15,7 @@ object StateSpek : Spek({
         val testState = State(players = listOf(Player("Asd"), Player("Bsd")), currentPlayer = 1)
 
         on("After action played") {
-            xit("Stays with the same player") {
+            it("Stays with the same player") {
                 assertThat(testState.apply(None)).isEqualToComparingFieldByField(testState.copy(
                     currentPlayer = 1, actionsPlayed = 1))
             }
@@ -37,12 +36,67 @@ object StateSpek : Spek({
 
                 assertThat(state.apply(None))
                     .isEqualToComparingFieldByField(
-                        state.copy(actionsPlayed = 1, wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 1))))
+                        state.copy(actionsPlayed = 1,
+                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 1))))
+            }
+            it("Should split Combined actions") {
+                val qualified = object : Observer {
+                    override fun isApplicable(action: Action,
+                                              state: State): Boolean = action == None
+
+                    override fun react(action: Action, state: State): Action = GiveResource(mapOf(
+                        Resource.ENERGY to 1), Player("Asd"))
+                }
+                val notQualified = object : Observer {
+                    override fun isApplicable(action: Action,
+                                              state: State): Boolean = action == Pass(Player("Bsd"))
+
+                    override fun react(action: Action, state: State): Action = GiveResource(
+                        mapOf(
+                            Resource.PLANT to 1),
+                        Player("Bsd"))
+                }
+                val state = testState.copy(observers = listOf(qualified, notQualified))
+
+                val action = Pass(Player("Bsd")).combined(None.combined(None)).combined(None)
+
+                assertThat(state.apply(action))
+                    .isEqualToComparingFieldByField(
+                        state.copy( consecutivePasses = 1, currentPlayer = 0,
+                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),Player("Bsd") to mapOf(Resource.PLANT to 1))))
+
+            }
+            it("Should split Combined actions") {
+                val qualified = object : Observer {
+                    override fun isApplicable(action: Action,
+                                              state: State): Boolean = action == None
+
+                    override fun react(action: Action, state: State): Action = GiveResource(mapOf(
+                        Resource.ENERGY to 1), Player("Asd"))
+                }
+                val notQualified = object : Observer {
+                    override fun isApplicable(action: Action,
+                                              state: State): Boolean = action == Pass(Player("Bsd"))
+
+                    override fun react(action: Action, state: State): Action = GiveResource(
+                        mapOf(
+                            Resource.PLANT to 1),
+                        Player("Bsd"))
+                }
+                val state = testState.copy(observers = listOf(qualified, notQualified))
+
+                val action = Pass(Player("Bsd")).consequent(None.consequent(None)).consequent(None)
+
+                assertThat(state.apply(action))
+                    .isEqualToComparingFieldByField(
+                        state.copy( consecutivePasses = 1, currentPlayer = 0,
+                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),Player("Bsd") to mapOf(Resource.PLANT to 1))))
+
             }
         }
 
         on("After 2 actions played") {
-            xit("Changes player") {
+            it("Changes player") {
                 assertThat(testState.copy(actionsPlayed = 1).apply(None)).isEqualToComparingFieldByField(
                     testState.copy(
                         currentPlayer = 0))
