@@ -22,7 +22,7 @@ object None : Action() {
     override operator fun invoke(state: State) = state
 }
 
-class SpendResource(private val resources: Map<Resource, Int>,
+data class SpendResource(private val resources: Map<Resource, Int>,
                     private val player: Player) : Action() {
     override operator fun invoke(state: State): State {
         checkArgument(isApplicable(state))
@@ -38,7 +38,7 @@ class SpendResource(private val resources: Map<Resource, Int>,
             }
 }
 
-class GiveResource(private val resources: Map<Resource, Int>,
+data class GiveResource(private val resources: Map<Resource, Int>,
                    private val player: Player) : Action() {
     override fun isApplicable(state: State) = true
 
@@ -50,28 +50,28 @@ class GiveResource(private val resources: Map<Resource, Int>,
     }
 }
 
-class Pass(private val player: Player) : Action() {
+data class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
     override fun invoke(state: State): State = state.copy(actionsPlayed = 1, consecutivePasses = state.consecutivePasses + 1)
 }
 
-class AddObserver(private val observer: Observer) : Action() {
+data class AddObserver(private val observer: Observer) : Action() {
 
     override fun isApplicable(state: State): Boolean = true
 
     override fun invoke(state: State): State = state.copy(observers = state.observers.plus(observer))
 }
 
-class Combined(private val actions: List<Action>) : Action() {
+data class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean = actions.all { it.isApplicable(state) }
 
     override fun invoke(state: State): State = actions.fold(state,
             { acc, action -> action.invoke(acc) })
 }
 
-class Consequent(private val actions: List<Action>) : Action() {
+data class Consequent(val actions: List<Action>) : Action() {
 
     override fun isApplicable(state: State): Boolean =
             actions.fold(state to true, { (newState, applicableSoFar), action ->
