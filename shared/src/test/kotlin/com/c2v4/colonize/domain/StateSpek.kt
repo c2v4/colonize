@@ -37,7 +37,7 @@ object StateSpek : Spek({
 
                 assertThat(state.apply(None))
                     .isEqualToComparingFieldByField(
-                        state.copy(actionsPlayed = 1,wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 1))))
+                        state.copy(actionsPlayed = 1, wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 1))))
             }
         }
 
@@ -48,6 +48,5 @@ object StateSpek : Spek({
                         currentPlayer = 0))
             }
         }
-
     }
 })

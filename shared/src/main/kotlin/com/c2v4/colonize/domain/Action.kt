@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.observer.Observer
 import com.c2v4.colonize.util.checkArgument
 import com.c2v4.colonize.util.minus
 import com.c2v4.colonize.util.plus
@@ -44,7 +45,7 @@ class GiveResource(private val resources: Map<Resource, Int>,
     override fun invoke(state: State): State {
         return state.let {
             it.copy(wallets = it.wallets.plus(player
-                    to ((it.wallets[player]?:emptyMap() ).plus(resources))))
+                    to ((it.wallets[player] ?: emptyMap() ).plus(resources))))
         }
     }
 }
@@ -54,6 +55,13 @@ class Pass(private val player: Player) : Action() {
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
     override fun invoke(state: State): State = state.copy(actionsPlayed = 1, consecutivePasses = state.consecutivePasses + 1)
+}
+
+class AddObserver(private val observer: Observer) : Action() {
+
+    override fun isApplicable(state: State): Boolean = true
+
+    override fun invoke(state: State): State = state.copy(observers = state.observers.plus(observer))
 }
 
 class Combined(private val actions: List<Action>) : Action() {
