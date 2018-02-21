@@ -6,11 +6,14 @@ import com.c2v4.colonize.util.checkArgument
 data class State(val players: List<Player> = emptyList(),
                  val currentPlayer: Int = 0,
                  val wallets: Map<Player, Map<Resource, Int>> = emptyMap(),
+                 val income: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val availableActions: Map<Player, Action> = emptyMap(),
+                 val conversionRates: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val actionsPlayed: Int = 0,
                  val consecutivePasses: Int = 0,
                  val observers: List<Observer> = emptyList(),
-                 val temperature: Int = -30)
+                 val temperature: Int = -30,
+                 val oxygen: Int = 0)
 
 fun State.apply(action: Action): State =
     checkArgument(action.isApplicable(this)).let {
@@ -20,8 +23,8 @@ fun State.apply(action: Action): State =
 private fun State.updateWithObservers(action: Action): State = action(this).let { state ->
     state.observers.filter {
         it.isApplicable(action, state)
-    }.fold(state, {
-            acc, observer -> acc.dispatch(observer.react(action, acc))
+    }.fold(state, { acc, observer ->
+            acc.dispatch(observer.react(action, acc))
         })
 }
 
@@ -37,12 +40,12 @@ private fun State.updateTurnChecked(action: Action): State {
 }
 
 fun State.dispatch(action: Action): State {
-    return when(action){
-        is Combined -> action.actions.fold(this,{
-            acc, internal -> acc.dispatch(internal)
+    return when (action) {
+        is Combined -> action.actions.fold(this, { acc, internal ->
+            acc.dispatch(internal)
         })
-        is Consequent -> action.actions.fold(this,{
-            acc, internal -> acc.dispatch(internal)
+        is Consequent -> action.actions.fold(this, { acc, internal ->
+            acc.dispatch(internal)
         })
         else -> updateWithObservers(action)
     }
