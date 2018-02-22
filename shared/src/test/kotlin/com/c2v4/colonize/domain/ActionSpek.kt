@@ -17,7 +17,7 @@ import java.lang.IllegalArgumentException
 @RunWith(JUnitPlatform::class)
 object ActionSpek : Spek({
     val testState = State(listOf(Player("Asd"), Player("Bsd")),
-        0,
+        currentPlayer = 0,
         wallets = mapOf(Player("Asd") to mapOf(HEAT to 3,
             ENERGY to 4,
             PLANT to 2),

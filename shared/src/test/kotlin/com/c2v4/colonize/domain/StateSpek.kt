@@ -62,8 +62,9 @@ object StateSpek : Spek({
 
                 assertThat(state.apply(action))
                     .isEqualToComparingFieldByField(
-                        state.copy( consecutivePasses = 1, currentPlayer = 0,
-                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),Player("Bsd") to mapOf(Resource.PLANT to 1))))
+                        state.copy(consecutivePasses = 0, currentPlayer = 0,
+                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),
+                                Player("Bsd") to mapOf(Resource.PLANT to 1))))
 
             }
             it("Should split Combined actions") {
@@ -89,8 +90,9 @@ object StateSpek : Spek({
 
                 assertThat(state.apply(action))
                     .isEqualToComparingFieldByField(
-                        state.copy( consecutivePasses = 1, currentPlayer = 0,
-                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),Player("Bsd") to mapOf(Resource.PLANT to 1))))
+                        state.copy(consecutivePasses = 1, currentPlayer = 0,
+                            wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),
+                                Player("Bsd") to mapOf(Resource.PLANT to 1))))
 
             }
         }
@@ -100,6 +102,20 @@ object StateSpek : Spek({
                 assertThat(testState.copy(actionsPlayed = 1).apply(None)).isEqualToComparingFieldByField(
                     testState.copy(
                         currentPlayer = 0))
+            }
+        }
+
+        on("2 consecutive passes") {
+            it("should end generation (add resources, " +
+                "change current player to starting player, change starting player)") {
+                val localState = testState.copy(incomes = mapOf(Player("Asd") to mapOf(Resource.GOLD to -3,
+                    Resource.IRON to 1)),
+                    points = mapOf(Player("Asd") to 15))
+                assertThat(localState.apply(Pass(Player("Bsd"))).apply(Pass(
+                    Player("Asd")))).isEqualToComparingFieldByField(localState.copy(
+                    nextStartingPlayer = 0,
+                    wallets = mapOf(Player("Asd") to mapOf(Resource.GOLD to 12, Resource.IRON to 1))
+                ))
             }
         }
     }
