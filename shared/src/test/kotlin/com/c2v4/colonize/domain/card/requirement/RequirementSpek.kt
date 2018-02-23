@@ -1,4 +1,4 @@
-package com.c2v4.colonize.domain.requirement
+package com.c2v4.colonize.domain.card.requirement
 
 import com.c2v4.colonize.domain.State
 import mock

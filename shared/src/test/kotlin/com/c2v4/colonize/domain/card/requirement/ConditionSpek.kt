@@ -1,4 +1,4 @@
-package com.c2v4.colonize.domain.requirement
+package com.c2v4.colonize.domain.card.requirement
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek

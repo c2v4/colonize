@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.card.Card
 import com.c2v4.colonize.domain.observer.Observer
 import com.c2v4.colonize.util.checkArgument
 import com.c2v4.colonize.util.minus
@@ -23,29 +24,29 @@ object None : Action() {
 }
 
 data class SpendResource(private val resources: Map<Resource, Int>,
-                    private val player: Player) : Action() {
+                         private val player: Player) : Action() {
     override operator fun invoke(state: State): State {
         checkArgument(isApplicable(state))
         return state.copy(wallets = state.wallets.plus(player to (state.wallets[player]?.minus(
-                resources))!!))
+            resources))!!))
     }
 
     override fun isApplicable(state: State): Boolean =
-            state.wallets.getOrDefault(player, emptyMap()).let {
-                resources.entries.all { (resource, amount) ->
-                    it[resource] ?: 0 >= amount
-                }
+        state.wallets.getOrDefault(player, emptyMap()).let {
+            resources.entries.all { (resource, amount) ->
+                it[resource] ?: 0 >= amount
             }
+        }
 }
 
 data class GiveResource(private val resources: Map<Resource, Int>,
-                   private val player: Player) : Action() {
+                        private val player: Player) : Action() {
     override fun isApplicable(state: State) = true
 
     override fun invoke(state: State): State {
         return state.let {
             it.copy(wallets = it.wallets.plus(player
-                    to ((it.wallets[player] ?: emptyMap() ).plus(resources))))
+                to ((it.wallets[player] ?: emptyMap()).plus(resources))))
         }
     }
 }
@@ -54,7 +55,8 @@ data class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
-    override fun invoke(state: State): State = state.copy(actionsPlayed = 1, consecutivePasses = state.consecutivePasses + 1)
+    override fun invoke(state: State): State = state.copy(actionsPlayed = 1,
+        consecutivePasses = state.consecutivePasses + 1)
 }
 
 data class AddObserver(private val observer: Observer) : Action() {
@@ -64,25 +66,38 @@ data class AddObserver(private val observer: Observer) : Action() {
     override fun invoke(state: State): State = state.copy(observers = state.observers.plus(observer))
 }
 
+data class PlayCard(private val player: Player,
+                    private val card: Card,
+                    private val action: Action) : Action() {
+    override fun isApplicable(state: State): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun invoke(state: State): State {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
 data class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean = actions.all { it.isApplicable(state) }
 
     override fun invoke(state: State): State = actions.fold(state,
-            { acc, action -> action.invoke(acc) })
+        { acc, action -> action.invoke(acc) })
 }
 
 data class Consequent(val actions: List<Action>) : Action() {
 
     override fun isApplicable(state: State): Boolean =
-            actions.fold(state to true, { (newState, applicableSoFar), action ->
-                if (applicableSoFar && action.isApplicable(newState)) {
-                    action(newState) to true
-                } else {
+        actions.fold(state to true, { (newState, applicableSoFar), action ->
+            if (applicableSoFar && action.isApplicable(newState)) {
+                action(newState) to true
+            } else {
 
-                    newState to false
-                }
-            }).second
+                newState to false
+            }
+        }).second
 
     override fun invoke(state: State): State = actions.fold(state,
-            { acc, action -> action.invoke(acc) })
+        { acc, action -> action.invoke(acc) })
 }

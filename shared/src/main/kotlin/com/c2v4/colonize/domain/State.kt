@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.card.Card
 import com.c2v4.colonize.domain.observer.Observer
 import com.c2v4.colonize.util.checkArgument
 import com.c2v4.colonize.util.plus
@@ -7,6 +8,7 @@ import com.c2v4.colonize.util.plus
 data class State(val players: List<Player> = emptyList(),
                  val wallets: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val incomes: Map<Player, Map<Resource, Int>> = emptyMap(),
+                 val hands: Map<Player,List<Card>> = emptyMap(),
                  val availableActions: Map<Player, Action> = emptyMap(),
                  val conversionRates: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val points: Map<Player, Int> = emptyMap(),
