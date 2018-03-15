@@ -1,5 +1,8 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.action
 
+import com.c2v4.colonize.domain.Player
+import com.c2v4.colonize.domain.Resource
+import com.c2v4.colonize.domain.State
 import com.c2v4.colonize.domain.card.Card
 import com.c2v4.colonize.domain.observer.Observer
 import com.c2v4.colonize.util.checkArgument

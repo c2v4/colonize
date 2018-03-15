@@ -1,5 +1,9 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.action.Action
+import com.c2v4.colonize.domain.action.Combined
+import com.c2v4.colonize.domain.action.Consequent
+import com.c2v4.colonize.domain.action.Pass
 import com.c2v4.colonize.domain.card.Card
 import com.c2v4.colonize.domain.observer.Observer
 import com.c2v4.colonize.util.checkArgument

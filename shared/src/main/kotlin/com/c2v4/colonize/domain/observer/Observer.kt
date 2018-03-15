@@ -1,6 +1,6 @@
 package com.c2v4.colonize.domain.observer
 
-import com.c2v4.colonize.domain.Action
+import com.c2v4.colonize.domain.action.Action
 import com.c2v4.colonize.domain.State
 
 interface Observer {

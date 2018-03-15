@@ -1,10 +1,10 @@
 ## Gradle
 .gradle
+gradle
 gradle-app.setting
 build/
 
 ## Java:
-*.class
 *.war
 *.ear
 hs_err_pid*
@@ -53,7 +53,6 @@ tmp/
 
 ## NetBeans
 **/nbproject/private/
-build/
 nbbuild/
 dist/
 nbdist/

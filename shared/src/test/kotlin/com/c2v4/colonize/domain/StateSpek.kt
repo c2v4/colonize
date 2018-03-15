@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.action.*
 import com.c2v4.colonize.domain.observer.Observer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
