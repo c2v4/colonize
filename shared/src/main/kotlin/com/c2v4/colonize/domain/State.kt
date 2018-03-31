@@ -12,7 +12,7 @@ import com.c2v4.colonize.util.plus
 data class State(val players: List<Player> = emptyList(),
                  val wallets: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val incomes: Map<Player, Map<Resource, Int>> = emptyMap(),
-                 val hands: Map<Player,List<Card>> = emptyMap(),
+                 val hands: Map<Player, List<Card>> = emptyMap(),
                  val availableActions: Map<Player, Action> = emptyMap(),
                  val conversionRates: Map<Player, Map<Resource, Int>> = emptyMap(),
                  val points: Map<Player, Int> = emptyMap(),
@@ -53,7 +53,6 @@ private fun State.updateWithObservers(action: Action): State = action(this).let 
         })
 }
 
-
 private fun State.updateTurnChecked(action: Action): State {
     dispatch(action).let {
         return if (it.actionsPlayed > 0) {
@@ -74,7 +73,6 @@ fun State.dispatch(action: Action): State {
         })
         else -> updateWithObservers(action)
     }
-
 }
 
 private fun nextTurn(state: State) =
@@ -86,7 +84,7 @@ private fun endGeneration(state: State): State = state.copy(
     nextStartingPlayer = (state.nextStartingPlayer + 1) % state.players.size,
     consecutivePasses = 0,
     wallets = state.wallets.plus(state.incomes).keys.map {
-        val newWallet = (state.wallets[it]?: emptyMap()).plus(state.incomes[it] ?: emptyMap())
+        val newWallet = (state.wallets[it] ?: emptyMap()).plus(state.incomes[it] ?: emptyMap())
         it to newWallet.plus(Resource.GOLD to (newWallet.getOrDefault(Resource.GOLD,
             0) + state.points.getOrDefault(it,
             0)))

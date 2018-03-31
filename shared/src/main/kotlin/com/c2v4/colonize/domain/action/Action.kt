@@ -72,14 +72,11 @@ data class AddObserver(private val observer: Observer) : Action() {
 data class PlayCard(private val player: Player,
                     private val card: Card,
                     private val action: Action) : Action() {
-    override fun isApplicable(state: State): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isApplicable(state: State): Boolean = card.actionScheme.isValid(action)
 
     override fun invoke(state: State): State {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }
 
 data class Combined(val actions: List<Action>) : Action() {

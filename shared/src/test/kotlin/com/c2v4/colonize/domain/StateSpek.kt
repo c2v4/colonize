@@ -66,7 +66,6 @@ object StateSpek : Spek({
                         state.copy(consecutivePasses = 0, currentPlayer = 0,
                             wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),
                                 Player("Bsd") to mapOf(Resource.PLANT to 1))))
-
             }
             it("Should split Combined actions") {
                 val qualified = object : Observer {
@@ -94,7 +93,6 @@ object StateSpek : Spek({
                         state.copy(consecutivePasses = 1, currentPlayer = 0,
                             wallets = mapOf(Player("Asd") to mapOf(Resource.ENERGY to 3),
                                 Player("Bsd") to mapOf(Resource.PLANT to 1))))
-
             }
         }
 
