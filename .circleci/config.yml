@@ -39,7 +39,7 @@ jobs:
               key: v1-dependencies-{{ checksum "build.gradle" }}
 
         # run tests!
-        - run: ./gradlew test ktlintCheck
+        - run: sh gradlew test ktlintCheck
 
         - store_test_results:
               path: build/test-results
