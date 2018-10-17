@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/c2v4/colonize.svg?style=shield)](https://circleci.com/gh/c2v4/colonize)
 # Colonize
 
 A [LibGDX](http://libgdx.badlogicgames.com/) project generated with [gdx-setup](https://github.com/czyzby/gdx-setup).
