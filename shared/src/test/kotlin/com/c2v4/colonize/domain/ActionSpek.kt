@@ -1,7 +1,17 @@
 package com.c2v4.colonize.domain
 
-import com.c2v4.colonize.domain.Resource.*
-import com.c2v4.colonize.domain.action.*
+import com.c2v4.colonize.domain.Resource.ENERGY
+import com.c2v4.colonize.domain.Resource.HEAT
+import com.c2v4.colonize.domain.Resource.IRON
+import com.c2v4.colonize.domain.Resource.PLANT
+import com.c2v4.colonize.domain.action.Action
+import com.c2v4.colonize.domain.action.AddObserver
+import com.c2v4.colonize.domain.action.GiveResource
+import com.c2v4.colonize.domain.action.None
+import com.c2v4.colonize.domain.action.Pass
+import com.c2v4.colonize.domain.action.SpendResource
+import com.c2v4.colonize.domain.action.combined
+import com.c2v4.colonize.domain.action.consequent
 import com.c2v4.colonize.domain.observer.Observer
 import mock
 import org.assertj.core.api.Assertions
@@ -17,19 +27,28 @@ import java.lang.IllegalArgumentException
 
 @RunWith(JUnitPlatform::class)
 object ActionSpek : Spek({
-    val testState = State(listOf(Player("Asd"), Player("Bsd")),
+    val testState = State(
+        listOf(Player("Asd"), Player("Bsd")),
         currentPlayer = 0,
-        wallets = mapOf(Player("Asd") to mapOf(HEAT to 3,
-            ENERGY to 4,
-            PLANT to 2),
-            Player("Bsd") to mapOf(ENERGY to 1, HEAT to 3))
+        wallets = mapOf(
+            Player("Asd") to mapOf(
+                HEAT to 3,
+                ENERGY to 4,
+                PLANT to 2
+            ),
+            Player("Bsd") to mapOf(ENERGY to 1, HEAT to 3)
+        )
     )
     given("Pass Action") {
         val passAction = Pass(Player("Asd"))
         on("Invoke") {
             it("Sets players state as both actions played") {
-                assertThat(passAction(testState)).isEqualTo(testState.copy(actionsPlayed = 1,
-                    consecutivePasses = 1))
+                assertThat(passAction(testState)).isEqualTo(
+                    testState.copy(
+                        actionsPlayed = 1,
+                        consecutivePasses = 1
+                    )
+                )
             }
         }
         on("Applicable") {
@@ -43,18 +62,28 @@ object ActionSpek : Spek({
     }
 
     given("GiveResource") {
-        val giveResource = GiveResource(mapOf(HEAT to 3,
-            ENERGY to 4,
-            IRON to 2),
-            Player("Asd"))
+        val giveResource = GiveResource(
+            mapOf(
+                HEAT to 3,
+                ENERGY to 4,
+                IRON to 2
+            ),
+            Player("Asd")
+        )
         on("Check invoke") {
             it("Gives resource to player") {
-                assertThat(giveResource(testState)).isEqualTo(testState.copy(wallets = testState.wallets.plus(
-                    Player("Asd") to mapOf(
-                        HEAT to 6,
-                        ENERGY to 8,
-                        PLANT to 2,
-                        IRON to 2))))
+                assertThat(giveResource(testState)).isEqualTo(
+                    testState.copy(
+                        wallets = testState.wallets.plus(
+                            Player("Asd") to mapOf(
+                                HEAT to 6,
+                                ENERGY to 8,
+                                PLANT to 2,
+                                IRON to 2
+                            )
+                        )
+                    )
+                )
             }
         }
         on("Check applicable") {
@@ -78,35 +107,58 @@ object ActionSpek : Spek({
     }
 
     given("SpendResource") {
-        val spendResource = SpendResource(mapOf(ENERGY to 3, HEAT to 3),
-            Player("Asd"))
+        val spendResource = SpendResource(
+            mapOf(ENERGY to 3, HEAT to 3),
+            Player("Asd")
+        )
         on("Check isApplicable") {
             it("True for positive case") {
                 assertThat(spendResource.isApplicable(testState)).isTrue()
             }
             it("False for negative case") {
-                assertThat(SpendResource(mapOf(ENERGY to 5,
-                    HEAT to 2), Player("Asd")).isApplicable(testState)).isFalse()
+                assertThat(
+                    SpendResource(
+                        mapOf(
+                            ENERGY to 5,
+                            HEAT to 2
+                        ), Player("Asd")
+                    ).isApplicable(testState)
+                ).isFalse()
             }
         }
         on("Check invoke") {
             it("Removes resources from player's wallet") {
-                assertThat(spendResource(testState)).isIn(testState.copy(
-                    wallets = testState.wallets.plus(Player("Asd") to mapOf(ENERGY to 1,
-                        PLANT to 2))
-                ),
-                    testState.copy(wallets = testState.wallets.plus(Player("Asd") to mapOf(
-                        ENERGY to 1,
-                        PLANT to 2,
-                        HEAT to 0))
-                    ))
+                assertThat(spendResource(testState)).isIn(
+                    testState.copy(
+                        wallets = testState.wallets.plus(
+                            Player("Asd") to mapOf(
+                                ENERGY to 1,
+                                PLANT to 2
+                            )
+                        )
+                    ),
+                    testState.copy(
+                        wallets = testState.wallets.plus(
+                            Player("Asd") to mapOf(
+                                ENERGY to 1,
+                                PLANT to 2,
+                                HEAT to 0
+                            )
+                        )
+                    )
+                )
             }
             it("Throws exception when is not applicable") {
                 Assertions.assertThatThrownBy {
-                    SpendResource(mapOf(ENERGY to 3,
-                        HEAT to 3), Player("Bsd"))(testState)
+                    SpendResource(
+                        mapOf(
+                            ENERGY to 3,
+                            HEAT to 3
+                        ), Player("Bsd")
+                    )(testState)
                 }.isInstanceOf(
-                        IllegalArgumentException::class.java)
+                    IllegalArgumentException::class.java
+                )
             }
         }
     }
@@ -121,8 +173,13 @@ object ActionSpek : Spek({
         }
         on("Check invoke") {
             it("Adds observer") {
-                assertThat(addObserver(testState)).isEqualTo(testState.copy(observers = testState.observers.plus(
-                    observer)))
+                assertThat(addObserver(testState)).isEqualTo(
+                    testState.copy(
+                        observers = testState.observers.plus(
+                            observer
+                        )
+                    )
+                )
             }
         }
     }
@@ -153,14 +210,28 @@ object ActionSpek : Spek({
                 val action = GiveResource(mapOf(IRON to 2), Player("Asd"))
                 val action2 = GiveResource(mapOf(PLANT to 1), Player("Asd"))
 
-                assertThat(action.combined(action2)(State(wallets = mapOf(Player("Asd") to mapOf(
-                    HEAT to 3,
-                    IRON to 2)))))
+                assertThat(
+                    action.combined(action2)(
+                        State(
+                            wallets = mapOf(
+                                Player("Asd") to mapOf(
+                                    HEAT to 3,
+                                    IRON to 2
+                                )
+                            )
+                        )
+                    )
+                )
                     .isEqualTo(
-                        State(wallets = mapOf(Player("Asd") to mapOf(
-                            HEAT to 3,
-                            IRON to 4,
-                            PLANT to 1)))
+                        State(
+                            wallets = mapOf(
+                                Player("Asd") to mapOf(
+                                    HEAT to 3,
+                                    IRON to 4,
+                                    PLANT to 1
+                                )
+                            )
+                        )
                     )
             }
         }
@@ -182,8 +253,17 @@ object ActionSpek : Spek({
                 val action = SpendResource(mapOf(IRON to 1), Player("Asd"))
                 val action2 = SpendResource(mapOf(IRON to 2), Player("Asd"))
 
-                assertThat(action.consequent(action2).isApplicable(State(wallets = mapOf(Player(
-                    "Asd") to mapOf(IRON to 2))))).isFalse()
+                assertThat(
+                    action.consequent(action2).isApplicable(
+                        State(
+                            wallets = mapOf(
+                                Player(
+                                    "Asd"
+                                ) to mapOf(IRON to 2)
+                            )
+                        )
+                    )
+                ).isFalse()
             }
         }
         on("invoke") {
@@ -191,14 +271,28 @@ object ActionSpek : Spek({
                 val action = GiveResource(mapOf(IRON to 2), Player("Asd"))
                 val action2 = GiveResource(mapOf(PLANT to 1), Player("Asd"))
 
-                assertThat(action.consequent(action2)(State(wallets = mapOf(Player("Asd") to mapOf(
-                    HEAT to 3,
-                    IRON to 2)))))
+                assertThat(
+                    action.consequent(action2)(
+                        State(
+                            wallets = mapOf(
+                                Player("Asd") to mapOf(
+                                    HEAT to 3,
+                                    IRON to 2
+                                )
+                            )
+                        )
+                    )
+                )
                     .isEqualTo(
-                        State(wallets = mapOf(Player("Asd") to mapOf(
-                            HEAT to 3,
-                            IRON to 4,
-                            PLANT to 1)))
+                        State(
+                            wallets = mapOf(
+                                Player("Asd") to mapOf(
+                                    HEAT to 3,
+                                    IRON to 4,
+                                    PLANT to 1
+                                )
+                            )
+                        )
                     )
             }
         }

@@ -26,12 +26,19 @@ object None : Action() {
     override operator fun invoke(state: State) = state
 }
 
-data class SpendResource(private val resources: Map<Resource, Int>,
-                         private val player: Player) : Action() {
+data class SpendResource(
+    private val resources: Map<Resource, Int>,
+    private val player: Player
+) : Action() {
     override operator fun invoke(state: State): State {
         checkArgument(isApplicable(state))
-        return state.copy(wallets = state.wallets.plus(player to (state.wallets[player]?.minus(
-            resources))!!))
+        return state.copy(
+            wallets = state.wallets.plus(
+                player to (state.wallets[player]?.minus(
+                    resources
+                ))!!
+            )
+        )
     }
 
     override fun isApplicable(state: State): Boolean =
@@ -42,14 +49,20 @@ data class SpendResource(private val resources: Map<Resource, Int>,
         }
 }
 
-data class GiveResource(private val resources: Map<Resource, Int>,
-                        private val player: Player) : Action() {
+data class GiveResource(
+    private val resources: Map<Resource, Int>,
+    private val player: Player
+) : Action() {
     override fun isApplicable(state: State) = true
 
     override fun invoke(state: State): State {
         return state.let {
-            it.copy(wallets = it.wallets.plus(player
-                to ((it.wallets[player] ?: emptyMap()).plus(resources))))
+            it.copy(
+                wallets = it.wallets.plus(
+                    player
+                        to ((it.wallets[player] ?: emptyMap()).plus(resources))
+                )
+            )
         }
     }
 }
@@ -58,8 +71,10 @@ data class Pass(private val player: Player) : Action() {
 
     override fun isApplicable(state: State) = state.players[state.currentPlayer] == player
 
-    override fun invoke(state: State): State = state.copy(actionsPlayed = 1,
-        consecutivePasses = state.consecutivePasses + 1)
+    override fun invoke(state: State): State = state.copy(
+        actionsPlayed = 1,
+        consecutivePasses = state.consecutivePasses + 1
+    )
 }
 
 data class AddObserver(private val observer: Observer) : Action() {
@@ -69,9 +84,11 @@ data class AddObserver(private val observer: Observer) : Action() {
     override fun invoke(state: State): State = state.copy(observers = state.observers.plus(observer))
 }
 
-data class PlayCard(private val player: Player,
-                    private val card: Card,
-                    private val action: Action) : Action() {
+data class PlayCard(
+    private val player: Player,
+    private val card: Card,
+    private val action: Action
+) : Action() {
     override fun isApplicable(state: State): Boolean = card.actionScheme.isValid(action)
 
     override fun invoke(state: State): State {
@@ -82,22 +99,23 @@ data class PlayCard(private val player: Player,
 data class Combined(val actions: List<Action>) : Action() {
     override fun isApplicable(state: State): Boolean = actions.all { it.isApplicable(state) }
 
-    override fun invoke(state: State): State = actions.fold(state,
-        { acc, action -> action.invoke(acc) })
+    override fun invoke(state: State): State = actions.fold(state) {
+            acc, action -> action.invoke(acc) }
 }
 
 data class Consequent(val actions: List<Action>) : Action() {
 
     override fun isApplicable(state: State): Boolean =
-        actions.fold(state to true, { (newState, applicableSoFar), action ->
+        actions.fold(state to true) { (newState, applicableSoFar), action ->
             if (applicableSoFar && action.isApplicable(newState)) {
                 action(newState) to true
             } else {
 
                 newState to false
             }
-        }).second
+        }.second
 
-    override fun invoke(state: State): State = actions.fold(state,
-        { acc, action -> action.invoke(acc) })
+    override fun invoke(state: State): State = actions.fold(
+        state
+    ) { acc, action -> action.invoke(acc) }
 }

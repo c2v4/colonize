@@ -1,6 +1,11 @@
 package com.c2v4.colonize.domain
 
-import com.c2v4.colonize.domain.action.*
+import com.c2v4.colonize.domain.action.Action
+import com.c2v4.colonize.domain.action.GiveResource
+import com.c2v4.colonize.domain.action.None
+import com.c2v4.colonize.domain.action.Pass
+import com.c2v4.colonize.domain.action.combined
+import com.c2v4.colonize.domain.action.consequent
 import com.c2v4.colonize.domain.observer.Observer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
