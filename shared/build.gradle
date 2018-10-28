@@ -22,6 +22,10 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit"
 
+    testCompile "io.cucumber:cucumber-java8:$cucumberVersion"
+    testCompile group: 'io.cucumber', name: 'cucumber-junit', version: cucumberVersion
+    compile group: 'io.cucumber', name: 'cucumber-picocontainer', version: cucumberVersion
+
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
 
