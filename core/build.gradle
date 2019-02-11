@@ -2,24 +2,24 @@
 eclipse.project.name = appName + '-core'
 
 dependencies {
-  compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-  compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-  compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-  compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-  compile "io.github.libktx:ktx-math:$ktxMathVersion"
-  compile "io.github.libktx:ktx-async:$ktxAsyncVersion"
-  compile "io.github.libktx:ktx-actors:$ktxActorsVersion"
-  compile "io.github.libktx:ktx-assets:$ktxAssetsVersion"
-  compile "io.github.libktx:ktx-app:$ktxAppVersion"
-  compile "io.github.libktx:ktx-inject:$ktxInjectVersion"
-  compile "io.github.libktx:ktx-collections:$ktxCollectionsVersion"
-  compile "io.github.libktx:ktx-style:$ktxStyleVersion"
-  compile "io.github.libktx:ktx-ashley:$ktxAshleyVersion"
-  compile "com.github.czyzby:gdx-kiwi:$kiwiVersion"
-  compile "io.github.libktx:ktx-scene2d:$ktxScene2DVersion"
-  compile "io.github.libktx:ktx-log:$ktxLogVersion"
-  compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion"
-  compile project(':shared')
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+    compile "io.github.libktx:ktx-math:$ktxMathVersion"
+    compile "io.github.libktx:ktx-async:$ktxAsyncVersion"
+    compile "io.github.libktx:ktx-actors:$ktxActorsVersion"
+    compile "io.github.libktx:ktx-assets:$ktxAssetsVersion"
+    compile "io.github.libktx:ktx-app:$ktxAppVersion"
+    compile "io.github.libktx:ktx-inject:$ktxInjectVersion"
+    compile "io.github.libktx:ktx-collections:$ktxCollectionsVersion"
+    compile "io.github.libktx:ktx-style:$ktxStyleVersion"
+    compile "io.github.libktx:ktx-ashley:$ktxAshleyVersion"
+    compile "com.github.czyzby:gdx-kiwi:$kiwiVersion"
+    compile "io.github.libktx:ktx-scene2d:$ktxScene2DVersion"
+    compile "io.github.libktx:ktx-log:$ktxLogVersion"
+    compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion"
+    compile project(':shared')
 }
         

@@ -9,7 +9,7 @@ import com.github.salomonbrys.kodein.bind
 import com.github.salomonbrys.kodein.singleton
 
 val context = Kodein {
-    bind() from singleton { Stage( FitViewport(640F, 480F)) }
+    bind() from singleton { Stage(FitViewport(640F, 480F)) }
     bind() from singleton { Skin(Gdx.files.internal("ui/skin.json")) }
     bind() from singleton { ColonizeGame() }
 }

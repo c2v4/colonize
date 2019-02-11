@@ -10,13 +10,12 @@ insert_final_newline = true
 
 
 [*.txt]
-insert_final_newline=false
+insert_final_newline = false
 trim_trailing_whitespace = false
-max_line_length=100
+max_line_length = 100
 
 [gradlew.bat]
 end_of_line = crlf
 
-[*.{kt,kts}]
-insert_final_newline=true
-max_line_length=120
+[*.{kt, kts}]
+max_line_length = 120
