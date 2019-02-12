@@ -7,3 +7,6 @@ data class State(
     val milestones: Milestones,
     val awards: Awards
 )
+
+fun endGameCheck(state: State) =
+    state.globalParameters.oxygen == 14 && state.globalParameters.temperature == 8 && state.surfaceMap.numberOfOceans == 9
