@@ -20,7 +20,6 @@ internal class StateTest : AnnotationSpec() {
         ).shouldBeTrue()
     }
 
-
     @Test
     internal fun endGameNegative() {
         endGameCheck(State()).shouldBeFalse()

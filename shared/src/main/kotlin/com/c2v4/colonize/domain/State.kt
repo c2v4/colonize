@@ -19,11 +19,9 @@ val temperatureLens: Lens<State, Int> =
         get = { s -> s.globalParameters.temperature },
         set = { state, value -> state.copy(globalParameters = state.globalParameters.copy(temperature = value)) })
 
-
 val oxygenLens: Lens<State, Int> =
     Lens(
         get = { s -> s.globalParameters.oxygen },
         set = { state, value -> state.copy(globalParameters = state.globalParameters.copy(oxygen = value)) })
-
 
 val oceansLens: Getter<State, Int> = Getter(get = { s -> s.surfaceMap.numberOfOceans })
