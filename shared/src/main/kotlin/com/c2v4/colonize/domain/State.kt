@@ -11,8 +11,13 @@ data class State(
     val awards: Awards = Awards()
 )
 
-fun endGameCheck(state: State) =
-    temperatureLens.get(state) == 8 && oxygenLens.get(state) == 14 && oceansLens.get(state) == 9
+const val MAX_TEMPERATURE = 8
+const val MAX_OXYGEN = 14
+const val MAX_NUMBER_OF_OCEANS = 9
+
+fun endGameCheck(state: State): Boolean {
+    return temperatureLens.get(state) == MAX_TEMPERATURE && oxygenLens.get(state) == MAX_OXYGEN && oceansLens.get(state) == MAX_NUMBER_OF_OCEANS
+}
 
 val temperatureLens: Lens<State, Int> =
     Lens(

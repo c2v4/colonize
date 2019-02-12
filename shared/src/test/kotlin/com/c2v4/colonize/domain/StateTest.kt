@@ -11,10 +11,10 @@ internal class StateTest : AnnotationSpec() {
     @Test
     internal fun endGamePositive() {
         val surfaceMapMock = mock<SurfaceMap>()
-        whenever(surfaceMapMock.numberOfOceans).thenReturn(9)
+        whenever(surfaceMapMock.numberOfOceans).thenReturn(MAX_NUMBER_OF_OCEANS)
         endGameCheck(
             State(
-                globalParameters = GlobalParameters(temperature = 8, oxygen = 14),
+                globalParameters = GlobalParameters(temperature = MAX_TEMPERATURE, oxygen = MAX_OXYGEN),
                 surfaceMap = surfaceMapMock
             )
         ).shouldBeTrue()
