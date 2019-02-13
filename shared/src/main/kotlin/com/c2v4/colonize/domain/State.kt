@@ -4,7 +4,6 @@ import arrow.optics.Getter
 import arrow.optics.Lens
 
 data class State(
-    val numberOfPlayers: Int = 0,
     val globalParameters: GlobalParameters = GlobalParameters(),
     val surfaceMap: SurfaceMap = SurfaceMap(),
     val milestones: Milestones = Milestones(),
