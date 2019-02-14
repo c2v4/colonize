@@ -1,5 +1,9 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.action.ChangeTerraformRating
+import com.c2v4.colonize.domain.action.RaiseTemperature
+import com.c2v4.colonize.domain.action.TEMPERATURE_INCREMENT_VALUE
+import com.c2v4.colonize.domain.action.TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.AnnotationSpec

@@ -1,5 +1,7 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.action.*
+import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.AnnotationSpec
@@ -19,6 +21,23 @@ internal class RaiseOxygenTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             )
+        )
+    }
+
+    @Test
+    fun oxygenWasRaisedWithAditionalEffect() {
+        val player = Player()
+        val state = oxygenLens.set(State(), OXYGEN_RAISE_PRECEEDING_BONUS)
+        val event = RaiseOxygen(player)
+        val (newState, events) = event(state)
+        (oxygenLens.get(newState) - oxygenLens.get(state)).shouldBe(OXYGEN_INCREMENT_VALUE)
+        events.shouldHaveSize(2)
+        events.shouldContainAll(
+            ChangeTerraformRating(
+                player,
+                TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
+            ),
+            RaiseTemperature(player)
         )
     }
 

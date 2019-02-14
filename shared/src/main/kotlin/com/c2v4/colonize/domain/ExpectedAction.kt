@@ -1,5 +1,7 @@
 package com.c2v4.colonize.domain
 
+import com.c2v4.colonize.domain.action.Action
+
 sealed class ExpectedAction {
     abstract fun isValid(action: Action): Boolean
 }
