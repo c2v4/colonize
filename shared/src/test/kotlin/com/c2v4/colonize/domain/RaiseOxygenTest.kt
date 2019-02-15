@@ -2,6 +2,7 @@ package com.c2v4.colonize.domain
 
 import com.c2v4.colonize.domain.action.*
 import io.kotlintest.matchers.collections.shouldContainAll
+import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.AnnotationSpec
@@ -32,7 +33,7 @@ internal class RaiseOxygenTest : AnnotationSpec() {
         val (newState, events) = event(state)
         (oxygenLens.get(newState) - oxygenLens.get(state)).shouldBe(OXYGEN_INCREMENT_VALUE)
         events.shouldHaveSize(2)
-        events.shouldContainAll(
+        events.shouldContainExactly(
             ChangeTerraformRating(
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
