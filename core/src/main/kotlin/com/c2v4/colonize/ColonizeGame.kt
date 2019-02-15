@@ -35,8 +35,10 @@ class ColonizeGame : ApplicationAdapter() {
         })
         window.add(button)
         window.pack()
-        window.setPosition(stage.width / 2f - window.width / 2f,
-                stage.height / 2f - window.height / 2f)
+        window.setPosition(
+            stage.width / 2f - window.width / 2f,
+            stage.height / 2f - window.height / 2f
+        )
         window.addAction(Actions.sequence(Actions.alpha(0f), Actions.fadeIn(1f)))
         stage.addActor(window)
 

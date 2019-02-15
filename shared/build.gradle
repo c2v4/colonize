@@ -4,7 +4,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile group: 'com.github.salomonbrys.kodein', name: 'kodein', version: '4.1.0'
 
-//    compile 'io.arrow-kt:arrow-core:0.6.0'
+    compile "io.arrow-kt:arrow-core:$arrowVersion"
 //    compile 'io.arrow-kt:arrow-typeclasses:0.6.0'
 //    compile 'io.arrow-kt:arrow-instances:0.6.0'
 //    compile 'io.arrow-kt:arrow-syntax:0.6.0'
@@ -14,32 +14,18 @@ dependencies {
 //    compile 'io.arrow-kt:arrow-effects:0.6.0' //optional
 //    compile 'io.arrow-kt:arrow-effects-rx2:0.6.0' //optional
 //    compile 'io.arrow-kt:arrow-effects-kotlinx-coroutines:0.6.0' //optional
-//    compile 'io.arrow-kt:arrow-optics:0.6.0' //optional
+    compile "io.arrow-kt:arrow-optics:$arrowVersion" //optional
 
-//    compile group: 'com.google.guava', name: 'guava', version: '23.6-jre'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.2.1'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+}
 
-//    compile "org.jetbrains.kotlin:kotlin-reflect"
-    testCompile "org.jetbrains.kotlin:kotlin-test"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit"
+test {
+    useJUnitPlatform()
 
-    testCompile "io.cucumber:cucumber-java8:$cucumberVersion"
-    testCompile group: 'io.cucumber', name: 'cucumber-junit', version: cucumberVersion
-    compile group: 'io.cucumber', name: 'cucumber-picocontainer', version: cucumberVersion
-
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
-    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
-
-    testCompile "org.jetbrains.spek:spek-api:$spekApiVersion"
-    testCompile "org.jetbrains.spek:spek-junit-platform-engine:$spekApiVersion"
-
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.2.0'
-
-//    testCompile "org.junit.platform:junit-platform-gradle-plugin:${junitRunnerVersion}"
-    testCompile "org.junit.platform:junit-platform-runner:$junitRunnerVersion"
-//    testCompile "org.junit.platform:junit-platform-console:$junitRunnerVersion"
-
-    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    testLogging {
+        events = ["passed", "failed", "skipped"]
+    }
 
 }
 

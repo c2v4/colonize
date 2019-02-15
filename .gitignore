@@ -8,6 +8,9 @@ build/
 *.ear
 hs_err_pid*
 
+## KotlinTest
+**/.kotlintest
+
 ## Android:
 android/libs/armeabi/
 android/libs/armeabi-v7a/

@@ -5,12 +5,12 @@ mainClassName = 'com.c2v4.colonize.server.ServerLauncher'
 eclipse.project.name = appName + '-server'
 
 dependencies {
-  compile project(':shared')
+    compile project(':shared')
 }
 
 jar {
-  from { configurations.compile.collect { zipTree(it) } }
-  manifest {
-    attributes 'Main-Class': project.mainClassName
-  }
+    from { configurations.compile.collect { zipTree(it) } }
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
 }
