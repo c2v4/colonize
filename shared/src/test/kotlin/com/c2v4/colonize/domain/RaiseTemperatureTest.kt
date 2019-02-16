@@ -1,6 +1,7 @@
 package com.c2v4.colonize.domain
 
 import com.c2v4.colonize.domain.action.*
+import com.c2v4.colonize.domain.action.expectance.PlaceOcean
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
@@ -29,7 +30,7 @@ internal class RaiseTemperatureTest : AnnotationSpec() {
 
     @Test
     fun temperatureWasRaisedFirstHeatBonus() {
-        val state = temperatureLens.set(State(), TEMPERATURE_PRECEEDING_FIRST_HEAT_BONUS)
+        val state = temperatureLens.set(State(), TEMPERATURE_PRECEDING_FIRST_HEAT_BONUS)
         val event = RaiseTemperature(player)
         val (newState, events) = event(state)
         (temperatureLens.get(newState) - temperatureLens.get(state)).shouldBe(
@@ -40,14 +41,14 @@ internal class RaiseTemperatureTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             ),
-            IncreaseProduction(player,Resource.HEAT,1)
+            IncreaseProduction(player, Resource.HEAT, 1)
         )
     }
 
 
     @Test
     fun temperatureWasRaisedSecondHeatBonus() {
-        val state = temperatureLens.set(State(), TEMPERATURE_PRECEEDING_SECOND_HEAT_BONUS)
+        val state = temperatureLens.set(State(), TEMPERATURE_PRECEDING_SECOND_HEAT_BONUS)
         val event = RaiseTemperature(player)
         val (newState, events) = event(state)
         (temperatureLens.get(newState) - temperatureLens.get(state)).shouldBe(
@@ -58,27 +59,27 @@ internal class RaiseTemperatureTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             ),
-            IncreaseProduction(player,Resource.HEAT,1)
+            IncreaseProduction(player, Resource.HEAT, 1)
         )
     }
 
 
     @Test
-    @Ignore
     fun temperatureWasRaisedOceanBonus() {
-        val state = temperatureLens.set(State(), TEMPERATURE_PRECEEDING_OCEAN_BONUS)
+        val state = temperatureLens.set(State(), TEMPERATURE_PRECEDING_OCEAN_BONUS)
         val event = RaiseTemperature(player)
-        val (newState, events) = event(state)
+        val (newState, events, expectedActions) = event(state)
         (temperatureLens.get(newState) - temperatureLens.get(state)).shouldBe(
             TEMPERATURE_INCREMENT_VALUE
         )
-        events.first().shouldBe(
+        events.shouldContainExactly(
             ChangeTerraformRating(
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             )
         )
-        TODO()
+        expectedActions.shouldContainExactly(PlaceOcean(player))
+
     }
 
     @Test
