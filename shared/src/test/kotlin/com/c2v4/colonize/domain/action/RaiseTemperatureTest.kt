@@ -1,7 +1,8 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.action
 
-import com.c2v4.colonize.domain.action.*
-import com.c2v4.colonize.domain.action.expectance.PlaceOcean
+import com.c2v4.colonize.domain.*
+import com.c2v4.colonize.domain.action.expectance.PlacingTile
+import com.c2v4.colonize.domain.map.Ocean
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
@@ -78,13 +79,16 @@ internal class RaiseTemperatureTest : AnnotationSpec() {
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             )
         )
-        expectedActions.shouldContainExactly(PlaceOcean(player))
+        expectedActions.shouldContainExactly(PlacingTile(player,Ocean))
 
     }
 
     @Test
     fun temperatureWasNotRaisedWhenAlreadyMax() {
-        val state = temperatureLens.set(State(), MAX_TEMPERATURE)
+        val state = temperatureLens.set(
+            State(),
+            MAX_TEMPERATURE
+        )
         val event = RaiseTemperature(player)
         val (newState, events) = event(state)
         temperatureLens.get(newState).shouldBe(temperatureLens.get(state))

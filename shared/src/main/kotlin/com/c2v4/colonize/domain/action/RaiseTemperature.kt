@@ -1,7 +1,8 @@
 package com.c2v4.colonize.domain.action
 
 import com.c2v4.colonize.domain.*
-import com.c2v4.colonize.domain.action.expectance.PlaceOcean
+import com.c2v4.colonize.domain.action.expectance.PlacingTile
+import com.c2v4.colonize.domain.map.Ocean
 
 const val TEMPERATURE_INCREMENT_VALUE = 2
 const val TEMPERATURE_PRECEDING_FIRST_HEAT_BONUS = -26
@@ -19,10 +20,10 @@ data class RaiseTemperature(val player: Player) : Action {
                         player,
                         TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
                     ),
-                    IncreaseProduction(player,Resource.HEAT,1)
+                    IncreaseProduction(player, Resource.HEAT, 1)
                 )
             )
-            TEMPERATURE_PRECEDING_OCEAN_BONUS ->ActionEffect(
+            TEMPERATURE_PRECEDING_OCEAN_BONUS -> ActionEffect(
                 temperatureLens.modify(state) { it + TEMPERATURE_INCREMENT_VALUE },
                 listOf(
                     ChangeTerraformRating(
@@ -30,7 +31,7 @@ data class RaiseTemperature(val player: Player) : Action {
                         TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
                     )
                 ),
-                setOf(PlaceOcean(player))
+                setOf(PlacingTile(player, Ocean))
             )
             MAX_TEMPERATURE -> ActionEffect(state)
             else -> ActionEffect(

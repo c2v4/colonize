@@ -1,13 +1,15 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.action
 
-import com.c2v4.colonize.domain.action.*
-import io.kotlintest.matchers.collections.shouldContainAll
+import com.c2v4.colonize.domain.MAX_OXYGEN
+import com.c2v4.colonize.domain.Player
+import com.c2v4.colonize.domain.State
+import com.c2v4.colonize.domain.oxygenLens
 import io.kotlintest.matchers.collections.shouldContainExactly
 import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.AnnotationSpec
 
-internal class RaiseOxygenTest : AnnotationSpec() {
+internal class PlaceTileTest : AnnotationSpec() {
 
     @Test
     fun oxygenWasRaised() {
@@ -46,7 +48,10 @@ internal class RaiseOxygenTest : AnnotationSpec() {
     @Test
     fun oxygenWasNotRaisedWhenAlreadyMax() {
         val player = Player()
-        val state = oxygenLens.set(State(), MAX_OXYGEN)
+        val state = oxygenLens.set(
+            State(),
+            MAX_OXYGEN
+        )
         val event = RaiseOxygen(player)
         val (newState, events) = event(state)
         oxygenLens.get(newState).shouldBe(oxygenLens.get(state))

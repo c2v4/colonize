@@ -1,5 +1,7 @@
-package com.c2v4.colonize.domain
+package com.c2v4.colonize.domain.action
 
+import com.c2v4.colonize.domain.*
+import com.c2v4.colonize.domain.map.SurfaceMap
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.kotlintest.matchers.boolean.shouldBeFalse
@@ -14,7 +16,10 @@ internal class StateTest : AnnotationSpec() {
         whenever(surfaceMapMock.numberOfOceans).thenReturn(MAX_NUMBER_OF_OCEANS)
         endGameCheck(
             State(
-                globalParameters = GlobalParameters(temperature = MAX_TEMPERATURE, oxygen = MAX_OXYGEN),
+                globalParameters = GlobalParameters(
+                    temperature = MAX_TEMPERATURE,
+                    oxygen = MAX_OXYGEN
+                ),
                 surfaceMap = surfaceMapMock
             )
         ).shouldBeTrue()

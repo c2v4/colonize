@@ -2,6 +2,7 @@ package com.c2v4.colonize.domain
 
 import arrow.optics.Getter
 import arrow.optics.Lens
+import com.c2v4.colonize.domain.map.SurfaceMap
 
 data class State(
     val globalParameters: GlobalParameters = GlobalParameters(),
