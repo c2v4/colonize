@@ -1,5 +1,5 @@
 package com.c2v4.colonize.domain
 
 enum class Resource {
-    HEAT
+    HEAT, PLANT, TITANIUM, IRON, MONEY, ENERGY
 }
