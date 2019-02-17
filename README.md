@@ -1,6 +1,8 @@
 [![CircleCI](https://circleci.com/gh/c2v4/colonize.svg?style=shield)](https://circleci.com/gh/c2v4/colonize)
 # Colonize
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2e705c292f72432fb64e4de516777722)](https://app.codacy.com/app/c2v4/colonize?utm_source=github.com&utm_medium=referral&utm_content=c2v4/colonize&utm_campaign=badger)
+
 A [LibGDX](http://libgdx.badlogicgames.com/) project generated with [gdx-setup](https://github.com/czyzby/gdx-setup).
 
 Project template included simple launchers and an `ApplicationAdapter` extension that draws a simple GUI stage on the screen.
