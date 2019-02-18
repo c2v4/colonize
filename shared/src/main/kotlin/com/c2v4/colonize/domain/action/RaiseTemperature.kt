@@ -31,7 +31,7 @@ data class RaiseTemperature(val player: Player) : Action {
                         TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
                     )
                 ),
-                setOf(PlacingTile(player, Ocean))
+                setOf(PlacingTile(player, setOf(Ocean)))
             )
             MAX_TEMPERATURE -> ActionEffect(state)
             else -> ActionEffect(

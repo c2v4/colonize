@@ -79,7 +79,7 @@ internal class RaiseTemperatureTest : AnnotationSpec() {
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             )
         )
-        expectedActions.shouldContainExactly(PlacingTile(player,Ocean))
+        expectedActions.shouldContainExactly(PlacingTile(player, setOf(Ocean)))
 
     }
 

@@ -1,6 +1,7 @@
 package com.c2v4.colonize.domain.action
 
 import com.c2v4.colonize.domain.*
+import com.c2v4.colonize.domain.map.MAX_NUMBER_OF_OCEANS
 import com.c2v4.colonize.domain.map.SurfaceMap
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever

@@ -1,11 +1,10 @@
 package com.c2v4.colonize.domain.action
 
 import arrow.core.Either
-import com.c2v4.colonize.domain.*
-import com.c2v4.colonize.domain.map.HexCoordinate
-import com.c2v4.colonize.domain.map.MapType
-import com.c2v4.colonize.domain.map.Ocean
-import com.c2v4.colonize.domain.map.TileType
+import com.c2v4.colonize.domain.Player
+import com.c2v4.colonize.domain.Resource
+import com.c2v4.colonize.domain.State
+import com.c2v4.colonize.domain.map.*
 
 data class PlaceTile(
     val player: Player,
