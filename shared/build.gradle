@@ -1,5 +1,7 @@
 eclipse.project.name = appName + '-shared'
 
+apply plugin: 'jacoco'
+
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     compile group: 'com.github.salomonbrys.kodein', name: 'kodein', version: '4.1.0'
@@ -20,13 +22,30 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 }
 
+test.finalizedBy(jacocoTestReport)
+
 test {
     useJUnitPlatform()
 
     testLogging {
         events = ["passed", "failed", "skipped"]
     }
+    jacoco {
+        destinationFile = file("${buildDir}/jacoco/test.exec")
+    }
+}
 
+jacoco {
+    // You may modify the Jacoco version here
+    toolVersion = "$jaCoCoVersion"
+}
+
+jacocoTestReport {
+    // Adjust the output of the test report
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
 
 repositories {
