@@ -1,5 +1,6 @@
 package com.c2v4.colonize.domain.action
 
+import arrow.core.Option
 import com.c2v4.colonize.domain.Player
 import com.c2v4.colonize.domain.Resource
 import com.c2v4.colonize.domain.State
@@ -27,6 +28,19 @@ internal class PlaceTileTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             )
+        )
+    }
+
+    @Test
+    fun placingGreenery() {
+        val player = Player()
+        val state = State()
+        val position = HexCoordinate.of(1, 2)
+        val event = PlaceTile(player, Greenery, position)
+        val (newState, causedActions) = event(state)
+        newState.surfaceMap.placed.shouldContainExactly(mapOf(position to Tile(Greenery, Option.just(player))))
+        causedActions.shouldContainExactly(
+            RaiseOxygen(player)
         )
     }
 

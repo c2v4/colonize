@@ -24,7 +24,7 @@ internal val surfaceLens: Lens<State, SurfaceMap> =
 
 internal val placedLens: (HexCoordinate) -> Lens<SurfaceMap, Tile> = { hexCoordinate ->
     Lens(
-        get = { s -> s.placed.getOrDefault(hexCoordinate, Tile()) },
+        get = { s -> s.placed.getOrDefault(hexCoordinate, EMPTY_TILE) },
         set = { s, b -> s.copy(placed = s.placed.plus(hexCoordinate to b)) })
 }
 
@@ -58,7 +58,7 @@ val stateMapGetter: (HexCoordinate) -> Getter<State, MapFieldType> =
         surfaceLens.compose(Getter { s ->
             s.map.getOrDefault(
                 hexCoordinate,
-                NotValid
+                MapFieldType.NOT_VALID
             )
         })
     }
