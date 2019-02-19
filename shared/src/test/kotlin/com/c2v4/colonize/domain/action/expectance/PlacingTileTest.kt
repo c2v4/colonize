@@ -104,7 +104,6 @@ internal class PlacingTileTest : AnnotationSpec() {
     fun greeneryShouldBePlacedNearOwnSpot() {
         val player = Player()
         val placingTile = PlacingTile(player, setOf(Greenery))
-        (of(0, 0).neighbours() + of(0, 0)).map { it to GENERAL_PURPOSE }.toMap()
         val state = State(
             surfaceMap = SurfaceMap(
                 map =
@@ -128,15 +127,17 @@ internal class PlacingTileTest : AnnotationSpec() {
         val player = Player()
         val player2 = Player()
         val placingTile = PlacingTile(player, setOf(Greenery))
-        (of(0, 0).neighbours() + of(0, 0)).map { it to GENERAL_PURPOSE }.toMap()
         val state = State(
             surfaceMap = SurfaceMap(
                 map =
-                (of(0, 0).neighbours() + of(0, 0)).map { it to GENERAL_PURPOSE }.toMap(),
-                placed = (mapOf(of(1, -1) to Tile(Greenery, Option.just(player))) + of(
+                (of(0, 0).neighbours()).map { it to GENERAL_PURPOSE }.toMap() + (of(
+                    0,
+                    0
+                ) to OCEAN_PLACE),
+                placed = (mapOf(of(1, -1) to Tile(Greenery, Option.just(player))) + (of(
                     1,
                     -1
-                ).neighbours().map { it to Tile(Greenery, player2.toOption()) })
+                ).neighbours() - of(0, 0)).map { it to Tile(Greenery, player2.toOption()) })
             )
         )
         placingTile(
@@ -160,7 +161,6 @@ internal class PlacingTileTest : AnnotationSpec() {
     fun greeneryCanBePlacedAnywhereWhenThereAreNoOwnSpots() {
         val player = Player()
         val placingTile = PlacingTile(player, setOf(Greenery))
-        (of(0, 0).neighbours() + of(0, 0)).map { it to GENERAL_PURPOSE }.toMap()
         val state = State(
             surfaceMap = SurfaceMap(
                 map =
