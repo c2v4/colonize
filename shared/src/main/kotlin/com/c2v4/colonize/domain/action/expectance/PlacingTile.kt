@@ -10,6 +10,7 @@ data class PlacingTile(val player: Player, val allowedTileTypes: Set<TileType>) 
     override fun isValid(action: Action, state: State): Boolean =
         action is PlaceTile &&
             action.player == player &&
+            action.position &&
             allowedTileTypes.contains(action.tileType) &&
             action.tileType.isValid(
                 action.position,

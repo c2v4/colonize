@@ -7,6 +7,7 @@ import com.c2v4.colonize.domain.State
 
 data class SurfaceMap(
     val map: Map<HexCoordinate, MapFieldType> = mapOf(),
+    val additionalFields: Map<MapType,Tile> = mapOf(),
     val bonusMap: Map<HexCoordinate, Bonus> = mapOf(),
     val placed: Map<HexCoordinate, Tile> = mapOf()
 ) {
@@ -39,7 +40,7 @@ internal val bonusLens: (HexCoordinate) -> Lens<SurfaceMap, Bonus> = { hexCoordi
         set = { s, b -> s.copy(bonusMap = s.bonusMap.plus(hexCoordinate to b)) })
 }
 
-val stateTileLens: (HexCoordinate) -> Lens<State, Tile> =
+val statePlacedLens: (HexCoordinate) -> Lens<State, Tile> =
     { hexCoordinate: HexCoordinate ->
         surfaceLens.compose(
             placedLens(hexCoordinate)

@@ -21,10 +21,10 @@ data class PlaceTile(
     override fun invoke(state: State): ActionEffect =
         position.fold({ mapType -> TODO() }, { hexCoordinate ->
             val numberOfAdjecentOceans =
-                hexCoordinate.neighbours().map { stateTileLens(it).get(state) }
+                hexCoordinate.neighbours().map { statePlacedLens(it).get(state) }
                     .count { it.tileType == Ocean }
             ActionEffect(
-                stateTileLens(hexCoordinate).set(state, tileType.getTile(player)),
+                statePlacedLens(hexCoordinate).set(state, tileType.getTile(player)),
                 stateBonusLens(hexCoordinate).get(state).causedActions(player) +
                     tileType.causedActions(player) +
                     if (numberOfAdjecentOceans == 0) emptyList() else listOf(
