@@ -14,6 +14,7 @@ sealed class TileType {
     abstract fun causedActions(player: Player): List<Action>
     abstract fun isValid(
         position: Either<MapType, HexCoordinate>,
+        player: Player,
         state: State
     ): Boolean
 }
@@ -21,8 +22,13 @@ sealed class TileType {
 const val OCEAN_TILE_MONEY_BONUS = 2
 
 object Ocean : TileType() {
-    override fun isValid(position: Either<MapType, HexCoordinate>, state: State)=
-        position.fold({false},{ hexCoordinate -> stateMapGetter(hexCoordinate).get(state) == MapFieldType.OCEAN_PLACE})
+    override fun isValid(
+        position: Either<MapType, HexCoordinate>,
+        player: Player,
+        state: State
+    ) =
+        position.fold({ false },
+            { hexCoordinate -> stateMapGetterFactory(hexCoordinate).get(state) == MapFieldType.OCEAN_PLACE })
 
     override fun causedActions(player: Player) = listOf(
         ChangeTerraformRating(
@@ -35,8 +41,31 @@ object Ocean : TileType() {
 }
 
 object Greenery : TileType() {
-    override fun isValid(position: Either<MapType, HexCoordinate>, state: State)=
-        position.fold({false},{ hexCoordinate -> stateMapGetter(hexCoordinate).get(state) == MapFieldType.OCEAN_PLACE})
+    override fun isValid(position: Either<MapType, HexCoordinate>, player: Player, state: State) =
+        position.fold({ false },
+            { hexCoordinate ->
+                stateMapGetterFactory(hexCoordinate).get(state) == MapFieldType.GENERAL_PURPOSE
+                    && neighbourhoodCondition(state, player, hexCoordinate)
+            })
+
+
+    private fun neighbourhoodCondition(
+        state: State,
+        player: Player,
+        hexCoordinate: HexCoordinate
+    ): Boolean {
+        val ownedTiles =
+            placedLens.get(state).filter { it.value.player.exists { owner -> owner == player } }
+                .keys
+        val neighboursOfOwned = ownedTiles.flatMap { it.neighbours() }
+        return ownedTiles.isEmpty()
+            || neighboursOfOwned.contains(hexCoordinate)
+            || neighboursOfOwned.none {
+            statePlacedLensFactory(it).get(state) == EMPTY_MAP_TILE
+                && stateMapGetterFactory(it).get(state) == MapFieldType.GENERAL_PURPOSE
+        }
+    }
+
 
     override fun causedActions(player: Player) = listOf(
         RaiseOxygen(player)
@@ -46,9 +75,13 @@ object Greenery : TileType() {
 }
 
 
-
 object EmptyTile : TileType() {
-    override fun isValid(position: Either<MapType, HexCoordinate>, state: State) = false
+    override fun isValid(
+        position: Either<MapType, HexCoordinate>,
+        player: Player,
+        state: State
+    ) = false
+
     override fun causedActions(player: Player) = emptyList<Action>()
     override fun getTile(player: Player) = Tile(EmptyTile)
 }

@@ -76,10 +76,16 @@ internal class PlacingTileTest : AnnotationSpec() {
             PlaceTile(player, Ocean, position),
             State(surfaceMap = SurfaceMap(map = mapOf(position to OCEAN_PLACE)))
         ).shouldBeTrue()
-
         placingTile(
             PlaceTile(player, Ocean, position),
-            State(surfaceMap = SurfaceMap(map = mapOf(position.plus(of(1, 0)) to OCEAN_PLACE)))
+            State(
+                surfaceMap = SurfaceMap(
+                    map = mapOf(
+                        position.plus(of(1, 0)) to OCEAN_PLACE,
+                        position to GENERAL_PURPOSE
+                    )
+                )
+            )
         ).shouldBeFalse()
     }
 
@@ -117,7 +123,7 @@ internal class PlacingTileTest : AnnotationSpec() {
         ).shouldBeTrue()
 
         placingTile(
-            PlaceTile(player, Ocean, of(-1, 0)),
+            PlaceTile(player, Greenery, of(-1, 0)),
             state
         ).shouldBeFalse()
     }
@@ -130,7 +136,7 @@ internal class PlacingTileTest : AnnotationSpec() {
         val state = State(
             surfaceMap = SurfaceMap(
                 map =
-                (of(0, 0).neighbours()).map { it to GENERAL_PURPOSE }.toMap() + (of(
+                of(0, 0).neighbours().map { it to GENERAL_PURPOSE }.toMap() + (of(
                     0,
                     0
                 ) to OCEAN_PLACE),
@@ -146,12 +152,12 @@ internal class PlacingTileTest : AnnotationSpec() {
         ).shouldBeTrue()
 
         placingTile(
-            PlaceTile(player, Ocean, of(0, +1)),
+            PlaceTile(player, Greenery, of(0, +1)),
             state
         ).shouldBeTrue()
 
         placingTile(
-            PlaceTile(player, Ocean, of(-1, +1)),
+            PlaceTile(player, Greenery, of(-1, +1)),
             state
         ).shouldBeTrue()
     }
@@ -173,7 +179,7 @@ internal class PlacingTileTest : AnnotationSpec() {
         ).shouldBeTrue()
 
         placingTile(
-            PlaceTile(player, Ocean, of(-1, 0)),
+            PlaceTile(player, Greenery, of(-1, 0)),
             state
         ).shouldBeTrue()
     }
