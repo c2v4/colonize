@@ -6,7 +6,8 @@ data class State(
     val globalParameters: GlobalParameters = GlobalParameters(),
     val surfaceMap: SurfaceMap = SurfaceMap(),
     val milestones: Milestones = Milestones(),
-    val awards: Awards = Awards()
+    val awards: Awards = Awards(),
+    val playerBoards: Map<Player,PlayerBoard> = emptyMap()
 )
 
 fun endGameCheck(state: State): Boolean {

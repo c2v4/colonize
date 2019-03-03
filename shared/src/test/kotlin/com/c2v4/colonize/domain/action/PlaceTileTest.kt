@@ -48,7 +48,7 @@ internal class PlaceTileTest : AnnotationSpec() {
     fun placingATileGivesABonus() {
         val player = Player()
         val position = HexCoordinate.of(1, 2)
-        val resourceMap = mapOf(Resource.IRON to 2)
+        val resourceMap = mapOf(Resource.STEEL to 2)
         val state = State(
             surfaceMap = SurfaceMap(
                 bonusMap = mapOf(
@@ -89,7 +89,7 @@ internal class PlaceTileTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             ),
-            GiveResource(player, mapOf(Resource.MONEY to OCEAN_TILE_MONEY_BONUS))
+            GiveResource(player, mapOf(Resource.MEGA_CREDITS to OCEAN_TILE_MONEY_BONUS))
         )
     }
 
@@ -111,7 +111,7 @@ internal class PlaceTileTest : AnnotationSpec() {
                 player,
                 TERRAFORM_RATING_INCREMENT_FOR_GLOBAL_PARAMETERS
             ),
-            GiveResource(player, mapOf(Resource.MONEY to (OCEAN_TILE_MONEY_BONUS * 2)))
+            GiveResource(player, mapOf(Resource.MEGA_CREDITS to (OCEAN_TILE_MONEY_BONUS * 2)))
         )
     }
 }

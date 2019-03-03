@@ -30,7 +30,7 @@ data class PlaceTile(
                     if (numberOfAdjecentOceans == 0) emptyList() else listOf(
                         GiveResource(
                             player,
-                            mapOf(Resource.MONEY to numberOfAdjecentOceans * 2)
+                            mapOf(Resource.MEGA_CREDITS to numberOfAdjecentOceans * 2)
                         )
                     )
             )
