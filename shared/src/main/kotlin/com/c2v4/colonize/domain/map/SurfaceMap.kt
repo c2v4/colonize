@@ -6,7 +6,7 @@ import arrow.syntax.function.memoize
 import com.c2v4.colonize.domain.State
 
 data class SurfaceMap(
-    val map: Map<HexCoordinate, MapFieldType> = mapOf(),
+    val map: Map<HexCoordinate, MapTileType> = mapOf(),
     val additionalFields: Map<MapType, Tile> = mapOf(),
     val bonusMap: Map<HexCoordinate, Bonus> = mapOf(),
     val placed: Map<HexCoordinate, Tile> = mapOf()
@@ -67,12 +67,12 @@ val stateBonusLensFactory: (HexCoordinate) -> Lens<State, Bonus> =
         )
     }
 
-val stateMapGetterFactory: (HexCoordinate) -> Getter<State, MapFieldType> =
+val stateMapGetterFactory: (HexCoordinate) -> Getter<State, MapTileType> =
     { hexCoordinate ->
         surfaceLens.compose(Getter { s ->
             s.map.getOrDefault(
                 hexCoordinate,
-                MapFieldType.NOT_VALID
+                MapTileType.NOT_VALID
             )
         })
     }

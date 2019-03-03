@@ -2,6 +2,7 @@ package com.c2v4.colonize.domain.map
 
 import arrow.core.Either
 import arrow.core.Option
+import arrow.core.toOption
 import com.c2v4.colonize.domain.Player
 import com.c2v4.colonize.domain.State
 import com.c2v4.colonize.domain.action.Action
@@ -28,7 +29,7 @@ object Ocean : TileType() {
         state: State
     ) =
         position.fold({ false },
-            { hexCoordinate -> stateMapGetterFactory(hexCoordinate).get(state) == MapFieldType.OCEAN_PLACE })
+            { hexCoordinate -> stateMapGetterFactory(hexCoordinate).get(state) == MapTileType.OCEAN_PLACE })
 
     override fun causedActions(player: Player) = listOf(
         ChangeTerraformRating(
@@ -44,7 +45,7 @@ object Greenery : TileType() {
     override fun isValid(position: Either<MapType, HexCoordinate>, player: Player, state: State) =
         position.fold({ false },
             { hexCoordinate ->
-                stateMapGetterFactory(hexCoordinate).get(state) == MapFieldType.GENERAL_PURPOSE
+                stateMapGetterFactory(hexCoordinate).get(state) == MapTileType.GENERAL_PURPOSE
                     && neighbourhoodCondition(state, player, hexCoordinate)
             })
 
@@ -62,7 +63,7 @@ object Greenery : TileType() {
             || neighboursOfOwned.contains(hexCoordinate)
             || neighboursOfOwned.none {
             statePlacedLensFactory(it).get(state) == EMPTY_MAP_TILE
-                && stateMapGetterFactory(it).get(state) == MapFieldType.GENERAL_PURPOSE
+                && stateMapGetterFactory(it).get(state) == MapTileType.GENERAL_PURPOSE
         }
     }
 
@@ -74,6 +75,26 @@ object Greenery : TileType() {
     override fun getTile(player: Player) = Tile(Greenery, Option.just(player))
 }
 
+object City : TileType() {
+    override fun getTile(player: Player): Tile = Tile(City, player.toOption())
+
+    override fun causedActions(player: Player): List<Action> = emptyList()
+
+    override fun isValid(
+        position: Either<MapType, HexCoordinate>,
+        player: Player,
+        state: State
+    ): Boolean = position.fold({ false },
+        { hexCoordinate ->
+            stateMapGetterFactory(hexCoordinate).get(state) == MapTileType.GENERAL_PURPOSE &&
+                neighbourhoodCondition(hexCoordinate, state)
+        })
+
+    private fun neighbourhoodCondition(hexCoordinate: HexCoordinate, state: State) =
+        !placedLens.get(state).filter { it.value.tileType == City }.keys.flatMap { it.neighbours() }.toSet().contains(
+            hexCoordinate
+        )
+}
 
 object EmptyTile : TileType() {
     override fun isValid(

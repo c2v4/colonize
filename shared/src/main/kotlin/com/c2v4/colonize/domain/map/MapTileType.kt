@@ -1,5 +1,5 @@
 package com.c2v4.colonize.domain.map
 
-enum class MapFieldType {
+enum class MapTileType {
     NOT_VALID,OCEAN_PLACE,GENERAL_PURPOSE
 }
